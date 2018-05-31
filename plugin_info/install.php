@@ -16,18 +16,20 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
-function PluginName_install() {
-    
+function ExtraTemplate_install()
+{
+
 }
 
-function PluginName_update() {
-    
+function ExtraTemplate_update()
+{
+
 }
 
 
-function PluginName_remove() {
-    
+function ExtraTemplate_remove()
+{
+
 }

@@ -16,15 +16,13 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-require_once 'PluginNameCmd.class.php';
+require_once 'ExtraTemplateCmd.class.php';
 
-class PluginName extends eqLogic
+class ExtraTemplate extends eqLogic
 {
     /*     * *************************Attributs****************************** */
-
 
 
     /*     * ***********************Methode static*************************** */
@@ -52,68 +50,63 @@ class PluginName extends eqLogic
      */
 
 
-
-    /*     * *********************Méthodes 
-    d'instance************************* */
+    /*     * *********************Méthodes d'instance************************* */
 
     public function preInsert()
     {
-        
+
     }
 
     public function postInsert()
     {
-        
+
     }
 
     public function preSave()
     {
-        
+
     }
 
     public function postSave()
     {
-        
+
     }
 
     public function preUpdate()
     {
-        
+
     }
 
     public function postUpdate()
     {
-        
+
     }
 
     public function preRemove()
     {
-        
+
     }
 
     public function postRemove()
     {
-        
+
     }
 
     /*
-     * Non obligatoire mais permet de modifier l'affichage du widget si vous 
-     en avez besoin
+     * Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
       public function toHtml($_version = 'dashboard') {
 
       }
      */
 
     /*
-     * Non obligatoire mais ca permet de déclencher une action après 
-     modification de variable de configuration
+     * Non obligatoire mais ca permet de déclencher une action après modification de variable de configuration
       public static function postConfig_<Variable>() {
       }
      */
 
     /*
-     * Non obligatoire mais ca permet de déclencher une action avant 
-     modification de variable de configuration
+     * Non obligatoire mais ca permet de déclencher une action avant modification de variable de configuration
       public static function preConfig_<Variable>() {
       }
      */

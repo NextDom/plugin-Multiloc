@@ -1,15 +1,14 @@
 {
   "id": "Multiloc",
   "name": "Multiloc",
-  "licence": "GPL-2",
+  "description": "Plugin template pour la création de plugin",
+  "licence": "AGPL",
+  "author": "NextDom",
   "require": "3.0",
-  "version": "0.1.0",
-  "category": "organization",
+  "category": "programming",
   "hasDependency": false,
-  "hasOwnDaemon": false,
+  "hasOwnDeamon": false,
   "maxDependancyInstallTime": 0,
-  "documentation": "https://nextdom.github.io/plugin-Multiloc/#language#/",
-  "changelog": "https://nextdom.github.io/plugin-Multiloc/#language#/changelog",
-  "description": "Permet de regrouper les localisation des utilisateurs sur une seule carte",
-  "author": "Byackee"
+  "changelog": "https://jeedom.github.io/plugin-Multiloc/#language#/changelog",
+  "documentation": "https://jeedom.github.io/plugin-Multiloc/#language#/"
 }

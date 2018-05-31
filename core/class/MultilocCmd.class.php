@@ -16,19 +16,16 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
-class PluginNameCmd extends cmd
+class ExtraTemplateCmd extends cmd
 {
     /*     * *************************Attributs****************************** */
     /*     * ***********************Methode static*************************** */
     /*     * *********************Methode d'instance************************* */
     /*
-     * Non obligatoire permet de demander de ne pas supprimer les commandes 
-     même si elles ne sont pas dans la nouvelle configuration de l'équipement 
-     envoyé en JS
+     * Non obligatoire permet de demander de ne pas supprimer les commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
       public function dontRemoveCmd() {
       return true;
       }
@@ -36,7 +33,7 @@ class PluginNameCmd extends cmd
 
     public function execute($_options = array())
     {
-        
+
     }
 
     /*     * **********************Getteur Setteur*************************** */
