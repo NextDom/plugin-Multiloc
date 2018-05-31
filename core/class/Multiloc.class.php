@@ -71,7 +71,7 @@ class Multiloc extends eqLogic
     {
       		$personne = $this->getCmd(null, 'personne');
 		if (!is_object($personne)) {
-			$personne = new modeCmd();
+			$personne = new Multiloc();
 			$personne->setTemplate('dashboard', 'tile');
 			$personne->setTemplate('mobile', 'tile');
 		}
@@ -80,7 +80,6 @@ class Multiloc extends eqLogic
 		$personne->setLogicalId('personne');
 		$personne->setType('info');
 		$personne->setSubType('string');
-		$personne->setDisplay('generic_type', 'MODE_SET_STATE');
       	$personne->setConfiguration('modes', 'personne');
 		$personne->save();     
 	}
