@@ -71,7 +71,7 @@ class Multiloc extends eqLogic
     {
       		$personne = $this->getCmd(null, 'personne');
 		if (!is_object($personne)) {
-			$personne = new Multiloc();
+			$personne = new MultilocCmd();
 			$personne->setTemplate('dashboard', 'tile');
 			$personne->setTemplate('mobile', 'tile');
 		}
