@@ -18,9 +18,9 @@
 
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-require_once 'ExtraTemplateCmd.class.php';
+require_once 'MultilocCmd.class.php';
 
-class ExtraTemplate extends eqLogic
+class Multiloc extends eqLogic
 {
     /*     * *************************Attributs****************************** */
 

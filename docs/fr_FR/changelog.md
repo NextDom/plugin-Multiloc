@@ -25,11 +25,11 @@
 
 ### Détail des changements
 
-Détail complet des mises à jour sur [Historique Commit](https://github.com/NextDom/plugin-ExtraTemplate/commits/master)
+Détail complet des mises à jour sur [Historique Commit](https://github.com/NextDom/plugin-Multiloc/commits/master)
 
 # Bug
 
 En cas de problèmes avec ce plugin il est possible d'ouvrir un ticket pour demander une correction :
 
-[https://github.com/NextDom/plugin-ExtraTemplate/issues](https://github.com/NextDom/plugin-ExtraTemplate/issues)
+[https://github.com/NextDom/plugin-Multiloc/issues](https://github.com/NextDom/plugin-Multiloc/issues)
 ~~Remplacer le lien vers le bugtracker du plugin~~

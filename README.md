@@ -1,9 +1,9 @@
 
-[![license](https://img.shields.io/github/license/NextDom/plugin-ExtraTemplate.svg)](./LICENSE) [![GitHub contributors](https://img.shields.io/github/contributors/NextDom/plugin-ExtraTemplate.svg)](../../graphs/contributors) [![GitHub release](https://img.shields.io/github/release/NextDom/plugin-ExtraTemplate.svg)](../../releases) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/_USERNAME) [![Waffle.io - Columns and their card count](https://badge.waffle.io/NextDom/plugin-ExtraTemplate.svg?columns=all)](https://waffle.io/NextDom/plugin-ExtraTemplate)
+[![license](https://img.shields.io/github/license/NextDom/plugin-Multiloc.svg)](./LICENSE) [![GitHub contributors](https://img.shields.io/github/contributors/NextDom/plugin-Multiloc.svg)](../../graphs/contributors) [![GitHub release](https://img.shields.io/github/release/NextDom/plugin-Multiloc.svg)](../../releases) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/_USERNAME) [![Waffle.io - Columns and their card count](https://badge.waffle.io/NextDom/plugin-Multiloc.svg?columns=all)](https://waffle.io/NextDom/plugin-Multiloc)
 
-### Master: [![Build Status](https://travis-ci.org/NextDom/plugin-ExtraTemplate.svg?branch=master)](https://travis-ci.org/NextDom/plugin-ExtraTemplate)  [![Coverage Status](https://coveralls.io/repos/github/NextDom/plugin-ExtraTemplate/badge.svg?branch=master)](https://coveralls.io/github/NextDom/plugin-ExtraTemplate?branch=master)
+### Master: [![Build Status](https://travis-ci.org/NextDom/plugin-Multiloc.svg?branch=master)](https://travis-ci.org/NextDom/plugin-Multiloc)  [![Coverage Status](https://coveralls.io/repos/github/NextDom/plugin-Multiloc/badge.svg?branch=master)](https://coveralls.io/github/NextDom/plugin-Multiloc?branch=master)
 
-### Develop: [![Build Status](https://travis-ci.org/NextDom/plugin-ExtraTemplate.svg?branch=develop)](https://travis-ci.org/NextDom/plugin-ExtraTemplate)  [![Coverage Status](https://coveralls.io/repos/github/NextDom/plugin-ExtraTemplate/badge.svg?branch=develop)](https://coveralls.io/github/NextDom/plugin-ExtraTemplate?branch=develop)
+### Develop: [![Build Status](https://travis-ci.org/NextDom/plugin-Multiloc.svg?branch=develop)](https://travis-ci.org/NextDom/plugin-Multiloc)  [![Coverage Status](https://coveralls.io/repos/github/NextDom/plugin-Multiloc/badge.svg?branch=develop)](https://coveralls.io/github/NextDom/plugin-Multiloc?branch=develop)
 
 # Présentation:
 
@@ -13,7 +13,7 @@ Template de permettant de céér des plugins pour Jeedom
 
 *Effacer cette section dans votre plugin*
 
-[Documentation principale](https://github.com/rjullien/plugin-ExtraTemplate/blob/develop/docs/fr_FR/index-ExtraTemplate.md)
+[Documentation principale](https://github.com/rjullien/plugin-Multiloc/blob/develop/docs/fr_FR/index-Multiloc.md)
 
 [Comment documenter un plug-in](https://github.com/NextDom/NextDom/wiki/Documentation-d'un-Plugin)
 
@@ -31,7 +31,7 @@ Template de permettant de céér des plugins pour Jeedom
 
 # Documentation complète:
 
-[![Read the Docs](plugin_info/ExtraTemplate_icon.png)](https://NextDom.github.io/plugin-ExtraTemplate)
+[![Read the Docs](plugin_info/Multiloc_icon.png)](https://NextDom.github.io/plugin-Multiloc)
 
 
 [![Support via PayPal](https://cdn.rawgit.com/twolfson/paypal-github-button/1.0.0/dist/button.svg)](https://www.paypal.me/_USERNAME/)

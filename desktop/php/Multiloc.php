@@ -2,7 +2,7 @@
 if (!isConnect('admin')) {
     throw new \Exception('{{401 - Accès non autorisé}}');
 }
-$plugin = plugin::byId('ExtraTemplate');
+$plugin = plugin::byId('Multiloc');
 sendVarToJS('eqType', $plugin->getId());
 $eqLogics = eqLogic::byType($plugin->getId());
 ?>
@@ -46,7 +46,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                     <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676">{{Configuration}}</span>
                 </div>
             </div>
-            <legend><i class="fa fa-table"></i> {{Mes ExtraTemplates}}</legend>
+            <legend><i class="fa fa-table"></i> {{Mes Multilocs}}</legend>
             <div class="eqLogicThumbnailContainer">
                 <?php
                 foreach ($eqLogics as $eqLogic) {
@@ -94,12 +94,12 @@ $eqLogics = eqLogic::byType($plugin->getId());
                         <fieldset>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label" for="name">{{Nom de l'équipement
-                                    ExtraTemplate}}</label>
+                                    Multiloc}}</label>
                                 <div class="col-sm-3">
                                     <input type="text" class="eqLogicAttr form-control" data-l1key="id"
                                            style="display : none;"/>
                                     <input type="text" class="eqLogicAttr form-control" data-l1key="name" id="name"
-                                           placeholder="{{Nom de l'équipement ExtraTemplate}}"/>
+                                           placeholder="{{Nom de l'équipement Multiloc}}"/>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -143,10 +143,10 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label" for="ExtraTemplate-param">{{ExtraTemplate param
+                                <label class="col-sm-3 control-label" for="Multiloc-param">{{Multiloc param
                                     1}}</label>
                                 <div class="col-sm-3">
-                                    <input type="text" class="eqLogicAttr form-control" id="ExtraTemplate-param"
+                                    <input type="text" class="eqLogicAttr form-control" id="Multiloc-param"
                                            data-l1key="configuration" data-l2key="city" placeholder="param1"/>
                                 </div>
                             </div>
@@ -177,5 +177,5 @@ $eqLogics = eqLogic::byType($plugin->getId());
     </div>
 
 <?php
-include_file('desktop', 'ExtraTemplate', 'js', 'ExtraTemplate');
+include_file('desktop', 'Multiloc', 'js', 'Multiloc');
 include_file('core', 'plugin.template', 'js');

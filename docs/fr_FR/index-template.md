@@ -3,7 +3,7 @@
 ![scrennshot1](../images/screenshot1.png)
 
 Plugin servant de base pour les plugins. Attention lors de l’utilisation
-à bien remplacer tous les ExtraTemplates par l’id de votre plugin.
+à bien remplacer tous les Multilocs par l’id de votre plugin.
 
 # Création plugin partie 1 : l’arborescence
 
@@ -133,9 +133,9 @@ Exemple :
 
 ```
     {
-        "id" : "ExtraTemplate",
+        "id" : "Multiloc",
         "name" : "Template",
-        "description" : "Plugin ExtraTemplate pour la création de plugin",
+        "description" : "Plugin Multiloc pour la création de plugin",
         "licence" : "AGPL",
         "author" : "Loïc",
         "require" : "3.0",
@@ -143,8 +143,8 @@ Exemple :
         "hasDependency" : false,
         "hasOwnDeamon" : false,
         "maxDependancyInstallTime" : 0,
-        "changelog" : "https://jeedom.github.io/plugin-ExtraTemplate/#language#/changelog",
-        "documentation" : "https://jeedom.github.io/plugin-ExtraTemplate/#language#/"
+        "changelog" : "https://jeedom.github.io/plugin-Multiloc/#language#/changelog",
+        "documentation" : "https://jeedom.github.io/plugin-Multiloc/#language#/"
     }
 ```
 
@@ -332,9 +332,9 @@ principalement sur bootstrap donc toute la documentation est applicable
 (<http://getbootstrap.com/>).
 
 Pour simplifier la création de plugin vous pouvez inclure dans votre
-page le script javascript de ExtraTemplate pour les plugins :
+page le script javascript de Multiloc pour les plugins :
 
-    <?php include_file('core', 'plugin.ExtraTemplate', 'js'); ?>
+    <?php include_file('core', 'plugin.Multiloc', 'js'); ?>
 
 A mettre tout en bas de votre page et utile uniquement sur la page de
 configuration de votre plugin. Ce script permet de réduire le javascript
@@ -584,7 +584,7 @@ Contient les fichiers PHP annexes, j’ai pris l’habitude de mettre par
 exemple un fichier d’inclusion si, bien sur, vous avez plusieurs
 fichiers de class ou des 3rparty à inclure
 
-### ExtraTemplate
+### Multiloc
 
 Qui peut contenir 2 sous-dossiers, dashboard et mobile, c’est un dossier
 que Jeedom scanne automatiquement à la recherche de widget, donc si vous
@@ -653,7 +653,7 @@ viennent les 2 classes obligatoires de votre plugin :
 - plugin\_idCmd
 
 La première devant hériter de la classe eqLogic et la deuxième de cmd.
-Voici un ExtraTemplate :
+Voici un Multiloc :
 
 ```
     <?php
@@ -760,7 +760,7 @@ des besoins, voici un exemple pour l’équipement
             $version = jeedom::versionAlias($_version);
             $replace['#forecast#'] = '';
             if ($version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
-                $forcast_ExtraTemplate = getTemplate('core', $version, 'forecast', 'weather');
+                $forcast_Multiloc = getTemplate('core', $version, 'forecast', 'weather');
                 for ($i = 0; $i < 5; $i++) {
                     $replaceDay = array();
                     $replaceDay['#day#'] = date_fr(date('l', strtotime('+' . $i . ' days')));
@@ -787,7 +787,7 @@ des besoins, voici un exemple pour l’équipement
                     }
                     $replaceDay['#icone#'] = is_object($condition) ? self::getIconFromCondition($condition->execCmd()) : '';
                     $replaceDay['#conditionid#'] = is_object($condition) ? $condition->getId() : '';
-                    $replace['#forecast#'] .= ExtraTemplate_replace($replaceDay, $forcast_ExtraTemplate);
+                    $replace['#forecast#'] .= Multiloc_replace($replaceDay, $forcast_Multiloc);
                 }
             }
             $temperature = $this->getCmd(null, 'temperature');
@@ -848,7 +848,7 @@ des besoins, voici un exemple pour l’équipement
                 $replace['#visibilityIcon#'] = "block";
                 $replace['#visibilityImage#'] = "none";
             }
-            $html = ExtraTemplate_replace($replace, getTemplate('core', $version, 'current', 'weather'));
+            $html = Multiloc_replace($replace, getTemplate('core', $version, 'current', 'weather'));
             cache::set('widgetHtml' . $_version . $this->getId(), $html, 0);
             return $html;
         }
@@ -873,16 +873,16 @@ quand même à bien vider le cache lors de la mise à jour des données
         }
 ```
 
-Récupération d’un ExtraTemplate de commande, ici le ExtraTemplate de commande :
-plugins/weather/core/ExtraTemplate/\$\_version/forecast.html (\$\_version
+Récupération d’un Multiloc de commande, ici le Multiloc de commande :
+plugins/weather/core/Multiloc/\$\_version/forecast.html (\$\_version
 valant mobile ou dashboard)
 
-    ``$forcast_ExtraTemplate = getTemplate('core', $_version, 'forecast', 'weather');``
+    ``$forcast_Multiloc = getTemplate('core', $_version, 'forecast', 'weather');``
 
 Ici remplacement des tags préalablement remplis dans \$replace du HTML
 pour contenir les valeurs
 
-    ``$html_forecast .= ExtraTemplate_replace($replace, $forcast_ExtraTemplate);``
+    ``$html_forecast .= Multiloc_replace($replace, $forcast_Multiloc);``
 
 Cela permet de récupérer la commande ayant le logical\_id :
 temperature\_min
@@ -896,7 +896,7 @@ a bien été récupérée
 
 Passage important: cela permet de récupérer les personalisations faites
 par l’utilisateur sur la page Générale → Affichage et de les réinjecter
-dans le ExtraTemplate
+dans le Multiloc
 
 ```
     $parameters = $this->getDisplay('parameters');
@@ -1120,7 +1120,7 @@ de l’utilisateur :
     ``$weather->refreshWidget();``
 
 Pour la classe commande, un petit truc à savoir si vous utilisez le
-ExtraTemplate js de base. Lors de l’envoi de l’équipment Jeedom fait du
+Multiloc js de base. Lors de l’envoi de l’équipment Jeedom fait du
 différentiel sur les commandes et va supprimer celles qui sont en base
 mais pas dans la nouvelle définition de l’équipement. Voilà comment
 l’éviter :

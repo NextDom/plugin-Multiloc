@@ -18,18 +18,18 @@
 
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
-function ExtraTemplate_install()
+function Multiloc_install()
 {
 
 }
 
-function ExtraTemplate_update()
+function Multiloc_update()
 {
 
 }
 
 
-function ExtraTemplate_remove()
+function Multiloc_remove()
 {
 
 }

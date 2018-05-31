@@ -8,7 +8,7 @@ echo Version de PHP
 php --version
 
 MOCKED_ENV=tests/mocked_Jeedom_env
-PLUGIN_NAME=ExtraTemplate
+PLUGIN_NAME=Multiloc
 
 mkdir -p $MOCKED_ENV/plugins
 rm -fr $MOCKED_ENV/plugins/*

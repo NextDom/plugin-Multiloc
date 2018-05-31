@@ -25,7 +25,7 @@ $("#table_cmd").sortable({
 });
 
 /*
- * Fonction pour l'ajout de commande, appellé automatiquement par plugin.ExtraTemplate
+ * Fonction pour l'ajout de commande, appellé automatiquement par plugin.Multiloc
  */
 function addCmdToTable(_cmd) {
     if (!isset(_cmd)) {

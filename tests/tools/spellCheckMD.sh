@@ -2,7 +2,7 @@
 for file in *.md docs/fr_FR/*.md; 
   do 
   echo $files
-  if [ $file = "docs/fr_FR/index-ExtraTemplate.md" ] || [ $file = "docs/fr_FR/index.md" ]
+  if [ $file = "docs/fr_FR/index-Multiloc.md" ] || [ $file = "docs/fr_FR/index.md" ]
   then
     echo "skip "$file
   else

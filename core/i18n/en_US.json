@@ -1,9 +1,9 @@
 {
-  "plugins\/ExtraTemplate\/desktop\/php\/ExtraTemplate.php": {
+  "plugins\/Multiloc\/desktop\/php\/Multiloc.php": {
     "Action": "Action",
     "Activer": "Activate",
     "Ajouter": "Add",
-    "Ajouter un ExtraTemplate": "Add a ExtraTemplate",
+    "Ajouter un Multiloc": "Add a Multiloc",
     "Aucun": "Nothing",
     "Catégorie": "Category",
     "Commandes": "Commands",
@@ -11,9 +11,9 @@
     "Configuration avancée": "Advanced configuration",
     "Equipement": "Equipment",
     "Gestion": "Management",
-    "Mes ExtraTemplates": "My ExtraTemplates",
+    "Mes Multilocs": "My Multilocs",
     "Nom": "Name",
-    "Nom de l'équipement ExtraTemplate": "Name of the ExtraTemplate equipment",
+    "Nom de l'équipement Multiloc": "Name of the Multiloc equipment",
     "Objet parent": "Parent object",
     "Rechercher": "Find",
     "Sauvegarder": "Save",
@@ -21,7 +21,7 @@
     "Type": "Type",
     "Visible": "Visible"
   },
-  "plugins\/ExtraTemplate\/plugin_info\/configuration.php": {
+  "plugins\/Multiloc\/plugin_info\/configuration.php": {
     "Global param 1": "First global parameter",
     "Global param 2": "Second global parameter",
     "Global param 3": "Third global parameter",

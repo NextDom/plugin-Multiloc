@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 require_once('../../core/php/core.inc.php');
 
-class ExtraTemplateAjaxTest extends TestCase
+class MultilocAjaxTest extends TestCase
 {
     /**
      * Appelée avant chaque test
@@ -44,7 +44,7 @@ class ExtraTemplateAjaxTest extends TestCase
     public function getTestRender()
     {
         ob_start();
-        require_once('core/ajax/ExtraTemplate.ajax.php');
+        require_once('core/ajax/Multiloc.ajax.php');
         return ob_get_clean();
     }
 
