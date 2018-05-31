@@ -1,0 +1,15 @@
+{
+  "id": "Multiloc",
+  "name": "Multiloc",
+  "licence": "GPL-2",
+  "require": "3.0",
+  "version": "0.1.0",
+  "category": "organization",
+  "hasDependency": false,
+  "hasOwnDaemon": false,
+  "maxDependancyInstallTime": 0,
+  "documentation": "https://nextdom.github.io/plugin-Multiloc/#language#/",
+  "changelog": "https://nextdom.github.io/plugin-Multiloc/#language#/changelog",
+  "description": "Permet de regrouper les localisation des utilisateurs sur une seule carte",
+  "author": "Byackee"
+}
