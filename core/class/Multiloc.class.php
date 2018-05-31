@@ -27,12 +27,12 @@ class Multiloc extends eqLogic
 
     /*     * ***********************Methode static*************************** */
 
-    /*
-     * Fonction exécutée automatiquement toutes les minutes par Jeedom
+    
+     /* Fonction exécutée automatiquement toutes les minutes par Jeedom */
       public static function cron() {
-
+		$eqLogic->refreshWidget();
       }
-     */
+     
 
 
     /*
@@ -69,8 +69,23 @@ class Multiloc extends eqLogic
 
     public function postSave()
     {
-
-    }
+      		$personne = $this->getCmd(null, 'personne');
+		if (!is_object($personne)) {
+			$personne = new modeCmd();
+			$personne->setTemplate('dashboard', 'tile');
+			$personne->setTemplate('mobile', 'tile');
+		}
+		$personne->setName(__('personne', __FILE__));
+		$personne->setEqLogic_id($this->id);
+		$personne->setLogicalId('personne');
+		$personne->setType('info');
+		$personne->setSubType('string');
+		$personne->setDisplay('generic_type', 'MODE_SET_STATE');
+      	$personne->setConfiguration('modes', 'personne');
+		$personne->save();     
+	}
+		
+  
 
     public function preUpdate()
     {
@@ -92,12 +107,33 @@ class Multiloc extends eqLogic
 
     }
 
-    /*
-     * Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
+    
+     //Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
       public function toHtml($_version = 'dashboard') {
+                $replace = $this->preToHtml($_version);
+        if (!is_array($replace)) {
+            return $replace;
+        }
+        $version = jeedom::versionAlias($_version);
+        $replace['#version#'] = $_version;
+        if ($this->getDisplay('hideOn' . $version) == 1) {
+            return '';
+        }
+        
+        foreach ($this->getCmd('info') as $cmd) {
+            $replace['#' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
+            $replace['#' . $cmd->getLogicalId() . '#'] = $cmd->getConfiguration("commande");
+            $replace['#' . $cmd->getLogicalId() . '_collect#'] = $cmd->getCollectDate();
+
+            if ($cmd->getIsHistorized() == 1) {
+                $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
+            }
+            $replace['#' . $cmd->getLogicalId() . '_id_display#'] = ($cmd->getIsVisible()) ? '#' . $cmd->getLogicalId() . "_id_display#" : "none";
+        }
+                return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'map', 'Multiloc')));
 
       }
-     */
+     
 
     /*
      * Non obligatoire mais ca permet de déclencher une action après modification de variable de configuration

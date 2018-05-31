@@ -31,21 +31,8 @@ if (!isConnect()) {
         <div class="form-group">
             <label class="col-lg-4 control-label">{{Global param 1}}</label>
             <div class="col-lg-2">
-                <input type="text" class="configKey form-control" data-l1key="param1" value="{{Default value}}"/>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-lg-4 control-label">{{Global param 2}}</label>
-            <div class="col-lg-2">
-                <input type="checkbox" class="configKey form-control" data-l1key="param2" checked="checked"/>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-lg-4 control-label">{{Global param 3}}</label>
-            <div class="col-lg-2">
-                <select class="configKey form-control" data-l1key="param3">
+                <select class="configKey form-control" data-l1key="param1">
                     <option value="value1">{{First value}}</option>
-                    <option value="value2">{{Second value}}</option>
                 </select>
             </div>
         </div>

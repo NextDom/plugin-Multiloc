@@ -20,7 +20,7 @@
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
-class PluginNameCmd extends cmd
+class MultilocCmd extends cmd
 {
     /*     * *************************Attributs****************************** */
     /*     * ***********************Methode static*************************** */
