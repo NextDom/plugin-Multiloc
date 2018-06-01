@@ -80,7 +80,6 @@ class Multiloc extends eqLogic
 		$personne->setLogicalId('personne');
 		$personne->setType('info');
 		$personne->setSubType('string');
-		$personne->setDisplay('generic_type', 'MODE_SET_STATE');
       	$personne->setConfiguration('modes', 'personne');
 		$personne->save();     
 	}
