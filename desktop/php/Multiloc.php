@@ -5,8 +5,13 @@ if (!isConnect('admin')) {
 $plugin = plugin::byId('Multiloc');
 sendVarToJS('eqType', $plugin->getId());
 $eqLogics = eqLogic::byType($plugin->getId());
-?>
 
+include_file("desktop", "leaflet", "js", "Multiloc");
+include_file("desktop", "leaflet", "css", "Multiloc");
+
+?>
+ 
+      
 <div class="row row-overflow">
     <div class="col-lg-2 col-md-3 col-sm-4">
         <div class="bs-sidebar">
@@ -60,6 +65,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
             <li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
             <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
             <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Commandes}}</a></li>
+             <li role="presentation"><a href="#maptab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{map}}</a></li>
         </ul>
         <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
             <div role="tabpanel" class="tab-pane active" id="eqlogictab">
@@ -131,8 +137,14 @@ $eqLogics = eqLogic::byType($plugin->getId());
                     </tbody>
                 </table>
             </div>
+                <div role="tabpanel" class="tab-pane" id="maptab">
+                <div id="table_map" class="table table-bordered table-condensed">
+
+                </div>
+               
             
 </div>
+
         </div>
 </div>
 

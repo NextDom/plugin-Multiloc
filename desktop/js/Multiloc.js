@@ -16,6 +16,8 @@
 
 
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
+$("#table_map").sortable({axis: "y", cursor: "move", items: ".map", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
+
 /*
 * Fonction pour l'ajout de commande, appellé automatiquement par plugin.template
 */
@@ -28,7 +30,8 @@ function addCmdToTable(_cmd) {
         _cmd.configuration = {};
     }
 
-        var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
+
+       var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
         tr += '<td>';
         tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
         tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="width : 140px;" placeholder="{{Nom}}">';
@@ -59,5 +62,33 @@ function addCmdToTable(_cmd) {
             $('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
         }
         jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
-
+  
+tr='    <div id="map" style="height: 800px"></div>';
+tr+='    <script>';
+tr+='	var planes = [';
+tr+='		["7C6B07",-40.99497,174.50808],';
+tr+='		["7C6B38",-41.30269,173.63696],';
+tr+='		["7C6CA1",-41.49413,173.5421],';
+tr+='		["7C6CA2",-40.98585,174.50659],';
+tr+='		["C81D9D",-40.93163,173.81726],';
+tr+='		["C82009",-41.5183,174.78081],';
+tr+='		["C82081",-41.42079,173.5783],';
+tr+='		["C820AB",-42.08414,173.96632],';
+tr+='		["C820B6",-41.51285,173.53274]';
+tr+='		];';
+tr+='        var map = L.map("map").setView([-41.3058, 174.82082], 8);';
+tr+='        mapLink = \'<a href="http://openstreetmap.org">OpenStreetMap</a>\';';
+tr+='        L.tileLayer(';
+tr+='            "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {';
+tr+='            attribution: "&copy; " + mapLink + " Contributors",';
+tr+='            maxZoom: 18,';
+tr+='            }).addTo(map);';
+tr+='		for (var i = 0; i < planes.length; i++) {';
+tr+='			marker = new L.marker([planes[i][1],planes[i][2]])';
+tr+='				.bindPopup(planes[i][0])';
+tr+='				.addTo(map);';
+tr+='		}';         
+tr+='    </script>';
+   	
+$('#table_map').append(tr);
     }
