@@ -30,6 +30,10 @@ class Multiloc extends eqLogic
     
      /* Fonction exécutée automatiquement toutes les minutes par Jeedom */
       public static function cron() {
+
+        foreach (eqLogic::byType('Multiloc', true) as $eqLogic) {
+            $eqLogic->updateInfo();
+        }
 		$eqLogic->refreshWidget();
       }
      
@@ -69,19 +73,22 @@ class Multiloc extends eqLogic
 
     public function postSave()
     {
-      		$personne = $this->getCmd(null, 'personne');
-		if (!is_object($personne)) {
-			$personne = new MultilocCmd();
-			$personne->setTemplate('dashboard', 'tile');
-			$personne->setTemplate('mobile', 'tile');
+      		$cmd = $this->getCmd(null, 'personne');
+		if (!is_object($cmd)) {
+			$cmd = new MultilocCmd();
+			$cmd->setTemplate('dashboard', 'tile');
+			$cmd->setTemplate('mobile', 'tile');
 		}
-		$personne->setName(__('personne', __FILE__));
-		$personne->setEqLogic_id($this->id);
-		$personne->setLogicalId('personne');
-		$personne->setType('info');
-		$personne->setSubType('string');
-      	$personne->setConfiguration('modes', 'personne');
-		$personne->save();     
+		$cmd->setName(__('personne', __FILE__));
+		$cmd->setEqLogic_id($this->id);
+		$cmd->setLogicalId('personne');
+		$cmd->setType('info');
+		$cmd->setSubType('string');
+      	$cmd->setConfiguration('position', '');
+      	$cmd->setConfiguration('typeLoc', '');
+		$cmd->save();    
+                   
+      $this->updateInfo();
 	}
 		
   
@@ -105,8 +112,22 @@ class Multiloc extends eqLogic
     {
 
     }
+  
+  	public function updateInfo()
+    {
+      foreach ($this->getCmd('info') as $cmd) {
+        $cmd_id =  substr($cmd->getConfiguration('virtEq'),1,-1); 
+        $cmd_virt = cmd::byId($cmd_id);
+        if (is_object($cmd_virt)) {
+         $cmd_value = $cmd_virt->execCmd();
+          $cmd->setConfiguration('position', $cmd_value);
+          $cmd->save(); 
+        }
+}
 
-    
+  	}
+
+   
      //Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
       public function toHtml($_version = 'dashboard') {
                 $replace = $this->preToHtml($_version);
@@ -119,16 +140,25 @@ class Multiloc extends eqLogic
             return '';
         }
         
+
         foreach ($this->getCmd('info') as $cmd) {
-            $replace['#' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
-            $replace['#' . $cmd->getLogicalId() . '#'] = $cmd->getConfiguration("commande");
+        
+          if ($cmd->getConfiguration("Typeloc") == "personne"){
+               log::add('Multiloc', 'debug', 'Typeloc: ' .$cmd->getConfiguration("Typeloc"));
+        $replace['#'.$cmd->getConfiguration("Typeloc").'#'] = $replace['#'.$cmd->getConfiguration("Typeloc").'#'] . 'L.marker(['. $cmd->getConfiguration("position") .']).addTo(mymap).bindPopup("' .$cmd->getName() .'").openPopup();';
+          }elseif ($cmd->getConfiguration("Typeloc") == "lieu"){
+        		log::add('Multiloc', 'debug', 'Typeloc: ' .$cmd->getConfiguration("typeloc"));
+        $replace['#'.$cmd->getConfiguration("Typeloc").'#'] = $replace['#'.$cmd->getConfiguration("Typeloc").'#'] . 'L.circle(['. $cmd->getConfiguration("position") .'], 500, {color: "red",fillColor: "#f03",fillOpacity: 0.5}).addTo(mymap).bindPopup("' .$cmd->getName() .'");';
+
+          }
             $replace['#' . $cmd->getLogicalId() . '_collect#'] = $cmd->getCollectDate();
 
             if ($cmd->getIsHistorized() == 1) {
                 $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
             }
-            $replace['#' . $cmd->getLogicalId() . '_id_display#'] = ($cmd->getIsVisible()) ? '#' . $cmd->getLogicalId() . "_id_display#" : "none";
+            $replace['#' . $cmd->getLogicalId() . '_id_display#'] = ($cmd->getIsVisible()) ? '#' . $cmd->getName() . "_id_display#" : "none";
         }
+
                 return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'map', 'Multiloc')));
 
       }

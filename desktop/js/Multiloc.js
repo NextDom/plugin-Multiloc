@@ -16,8 +16,14 @@
 
 
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
-$("#table_map").sortable({axis: "y", cursor: "move", items: ".map", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 
+ $("#table_cmd").delegate(".listEquipementInfo", 'click', function () {
+    var el = $(this);
+    jeedom.cmd.getSelectModal({cmd: {type: 'info'}}, function (result) {
+        var calcul = el.closest('tr').find('.cmdAttr[data-l1key=configuration][data-l2key=' + el.data('input') + ']');
+        calcul.atCaret('insert', result.human);
+    });
+});
 /*
 * Fonction pour l'ajout de commande, appellé automatiquement par plugin.template
 */
@@ -30,7 +36,6 @@ function addCmdToTable(_cmd) {
         _cmd.configuration = {};
     }
 
-
        var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
         tr += '<td>';
         tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
@@ -40,9 +45,12 @@ function addCmdToTable(_cmd) {
         tr += '<span class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>';
         tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
         tr += '</td>';
-       	tr += '<td>';
-        tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="commande" style="width: 90%;display: inherit" ></input>';
-        tr += '</td>';
+   		tr += '<td>';
+        tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="Typeloc" style="width : 140px;">';
+  		tr += '</td>';
+  		tr += '<td><textarea class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="virtEq" style="height : 33px;" placeholder="{{Equipement}}"></textarea>';
+       	tr += '<a class="btn btn-default cursor listEquipementInfo btn-sm" data-input="virtEq"><i class="fa fa-list-alt "></i> {{Rechercher équipement}}</a>';      
+  		tr += '</td>';
         tr += '<td style="width: 150px;">';
         tr += '<span><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isVisible" checked/> {{Afficher}}<br/></span>';
       	tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
@@ -63,32 +71,5 @@ function addCmdToTable(_cmd) {
         }
         jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
   
-tr='    <div id="map" style="height: 800px"></div>';
-tr+='    <script>';
-tr+='	var planes = [';
-tr+='		["7C6B07",-40.99497,174.50808],';
-tr+='		["7C6B38",-41.30269,173.63696],';
-tr+='		["7C6CA1",-41.49413,173.5421],';
-tr+='		["7C6CA2",-40.98585,174.50659],';
-tr+='		["C81D9D",-40.93163,173.81726],';
-tr+='		["C82009",-41.5183,174.78081],';
-tr+='		["C82081",-41.42079,173.5783],';
-tr+='		["C820AB",-42.08414,173.96632],';
-tr+='		["C820B6",-41.51285,173.53274]';
-tr+='		];';
-tr+='        var map = L.map("map").setView([-41.3058, 174.82082], 8);';
-tr+='        mapLink = \'<a href="http://openstreetmap.org">OpenStreetMap</a>\';';
-tr+='        L.tileLayer(';
-tr+='            "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {';
-tr+='            attribution: "&copy; " + mapLink + " Contributors",';
-tr+='            maxZoom: 18,';
-tr+='            }).addTo(map);';
-tr+='		for (var i = 0; i < planes.length; i++) {';
-tr+='			marker = new L.marker([planes[i][1],planes[i][2]])';
-tr+='				.bindPopup(planes[i][0])';
-tr+='				.addTo(map);';
-tr+='		}';         
-tr+='    </script>';
-   	
-$('#table_map').append(tr);
+
     }

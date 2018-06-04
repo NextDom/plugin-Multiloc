@@ -138,7 +138,16 @@ include_file("desktop", "leaflet", "css", "Multiloc");
                 </table>
             </div>
                 <div role="tabpanel" class="tab-pane" id="maptab">
-                <div id="table_map" class="table table-bordered table-condensed">
+                <div id='map' style="height:400px"></div>
+                <script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiYnlhY2tlZSIsImEiOiJjamh6d3hvdWwwMXZ6M3BxbWhnZjN1cTVkIn0.QefkemI0M83cWb57DYhs7Q';
+var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: 'mapbox://styles/mapbox/streets-v9', // stylesheet location
+    center: [2.3344,48.8620], // starting position [lng, lat]
+    zoom: 9 // starting zoom
+});
+</script>
 
                 </div>
                
