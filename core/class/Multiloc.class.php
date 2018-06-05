@@ -85,7 +85,7 @@ class Multiloc extends eqLogic
 		$cmd->setType('info');
 		$cmd->setSubType('string');
       	$cmd->setConfiguration('position', '');
-      	$cmd->setConfiguration('typeLoc', '');
+      	$cmd->setConfiguration('typeloc', '');
 		$cmd->save();    
                    
       $this->updateInfo();
@@ -144,11 +144,12 @@ class Multiloc extends eqLogic
         foreach ($this->getCmd('info') as $cmd) {
         
           if ($cmd->getConfiguration("Typeloc") == "personne"){
+      
                log::add('Multiloc', 'debug', 'Typeloc: ' .$cmd->getConfiguration("Typeloc"));
-        $replace['#'.$cmd->getConfiguration("Typeloc").'#'] = $replace['#'.$cmd->getConfiguration("Typeloc").'#'] . 'L.marker(['. $cmd->getConfiguration("position") .']).addTo(mymap).bindPopup("' .$cmd->getName() .'").openPopup();';
+        $replace['#'.$cmd->getConfiguration("Typeloc").'#'] = $replace['#'.$cmd->getConfiguration("Typeloc").'#'] . 'L.marker(['. $cmd->getConfiguration("position") .']).addTo(map'.$cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'").openPopup();';
           }elseif ($cmd->getConfiguration("Typeloc") == "lieu"){
         		log::add('Multiloc', 'debug', 'Typeloc: ' .$cmd->getConfiguration("typeloc"));
-        $replace['#'.$cmd->getConfiguration("Typeloc").'#'] = $replace['#'.$cmd->getConfiguration("Typeloc").'#'] . 'L.circle(['. $cmd->getConfiguration("position") .'], 500, {color: "red",fillColor: "#f03",fillOpacity: 0.5}).addTo(mymap).bindPopup("' .$cmd->getName() .'");';
+        $replace['#'.$cmd->getConfiguration("Typeloc").'#'] = $replace['#'.$cmd->getConfiguration("Typeloc").'#'] . 'L.circle(['. $cmd->getConfiguration("position") .'], 500, {color: "red",fillColor: "#f03",fillOpacity: 0.5}).addTo(map'.$cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");';
 
           }
             $replace['#' . $cmd->getLogicalId() . '_collect#'] = $cmd->getCollectDate();
