@@ -20,7 +20,7 @@
         id: 'mapbox.streets'
     }).addTo(map#id#);
 
-    #icons#         
+    #icons#
     #personne#
     #lieu#
 
@@ -48,7 +48,7 @@
             resizable: true,
             title: '#name_display# - Carte détaillée'
         });
-        $('#md_modal').load('index.php?v=d&plugin=Multiloc&modal=carte.Multiloc&id=#id#&dist_loc=#dist_loc#&zoom=#zoom#&zoom=#map_center#');
+        $('#md_modal').load('index.php?v=d&plugin=Multiloc&modal=carte.Multiloc&id=#id#&dist_loc=#dist_loc#&zoom=#zoom#&map_center=#map_center#');
         $('#md_modal').dialog('open');
     }
 
