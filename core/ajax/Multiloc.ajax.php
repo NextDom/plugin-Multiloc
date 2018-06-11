@@ -16,30 +16,66 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * Fichier appelé lorsque le plugin effectue une requête Ajax
- */
-
 try {
-    // Ajoute le fichier du core qui se charge d'inclure tous les fichiers nécessaires
     require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-
-    // Ajoute le fichier de gestion des authentifications
     include_file('core', 'authentification', 'php');
-
-    // Test si l'utilisateur est connecté
     if (!isConnect('admin')) {
-        // Lève un exception si l'utilisateur n'est pas connecté avec les bons droits
-        throw new \Exception(__('401 - Accès non autorisé', __FILE__));
+        throw new Exception(__('401 - Accès non autorisé', __FILE__));
+
     }
 
-    // Initialise la gestion des requêtes Ajax
-    ajax::init();
 
-    // Lève une exception si la requête n'a pas été traitée avec succès (Appel de la fonction ajax::success());
-    throw new \Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-    /*     * *********Catch exeption*************** */
-} catch (\Exception $e) {
-    // Affiche l'exception levé à l'utilisateur
+    if (init('action') == 'listImage') {
+        $uploaddir = dirname(__FILE__) . '/../../desktop/images';
+        if (!file_exists($uploaddir)) {
+            mkdir($uploaddir);
+        }
+        if (!file_exists($uploaddir)) {
+            throw new Exception(__("{{Répertoire d'upload d'images non trouvé}} : ", __FILE__) . $uploaddir);
+        }
+        ajax::success(ls($uploaddir, "*", false, array('files')));
+    }
+
+    if (init('action') == 'removeImage') {
+        $uploaddir = dirname(__FILE__) . '/../../desktop/images/';
+        $name = init('image');
+        ajax::success(unlink($uploaddir . $name));
+    }
+
+    if (init('action') == 'imageUpload') {
+              $uploaddir = dirname(__FILE__) . '/../../desktop/images';
+        if (!file_exists($uploaddir)) {
+            throw new Exception(__("{{Répertoire d'upload non trouvé}} : ", __FILE__) . $uploaddir);
+        }
+        if (!isset($_FILES['images'])) {
+            throw new Exception(__('{{Aucun fichier trouvé. Vérifié parametre PHP (post size limit}}', __FILE__));
+        }
+        $extension = strtolower(strrchr($_FILES['images']['name'], '.'));
+        if (!in_array($extension, array('.png','.jpg'))) {
+            throw new Exception('{{Seul les images sont acceptées (autorisé .jpg .png)}} : ' . $extension);
+        }
+        if (filesize($_FILES['images']['tmp_name']) > 1000000) {
+            throw new Exception(__('{{Le fichier est trop gros}} (maximum 8mo)', __FILE__));
+        }
+        if (!move_uploaded_file($_FILES['images']['tmp_name'], $uploaddir . '/' . $_FILES['images']['name'])) {
+            throw new Exception(__('{{Impossible de déplacer le fichier temporaire}}', __FILE__));
+        }
+        if (!file_exists($uploaddir . '/' . $_FILES['images']['name'])) {
+            throw new Exception(__("{{Impossible d'uploader le fichier (limite du serveur web ?)}}", __FILE__));
+        }
+
+        ajax::success();
+    }
+  	
+    
+    throw new Exception(__('Aucune methode correspondante à : ', __FILE__) . init('action'));
+
+} catch (Exception $e) {
     ajax::error(displayExeption($e), $e->getCode());
+}
+
+function clean($string) {
+   $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+
+   return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
 }

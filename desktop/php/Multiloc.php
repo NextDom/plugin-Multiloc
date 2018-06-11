@@ -2,15 +2,19 @@
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
+include_file("desktop", "leaflet", "js", "Multiloc");
+include_file("desktop", "leaflet", "css", "Multiloc");
+include_file('3rdparty', 'jquery.fileupload/jquery.fileupload', 'js');
+
 $plugin = plugin::byId('Multiloc');
 sendVarToJS('eqType', $plugin->getId());
 $eqLogics = eqLogic::byType($plugin->getId());
 
-include_file("desktop", "leaflet", "js", "Multiloc");
-include_file("desktop", "leaflet", "css", "Multiloc");
+
 
 ?>
- 
+
+
       
 <div class="row row-overflow">
     <div class="col-lg-2 col-md-3 col-sm-4">
@@ -42,7 +46,7 @@ include_file("desktop", "leaflet", "css", "Multiloc");
                 <span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;color:#767676">{{Configuration}}</span>
             </div>
         </div>
-        <legend><i class="fa fa-table"></i> {{Mes AndroidRemoteControl}}</legend>
+        <legend><i class="fa fa-table"></i> {{Mes cartes}}</legend>
         <div class="eqLogicThumbnailContainer">
             <?php
             foreach ($eqLogics as $eqLogic) {
@@ -65,7 +69,6 @@ include_file("desktop", "leaflet", "css", "Multiloc");
             <li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
             <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
             <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Commandes}}</a></li>
-             <li role="presentation"><a href="#maptab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{map}}</a></li>
         </ul>
         <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
             <div role="tabpanel" class="tab-pane active" id="eqlogictab">
@@ -118,8 +121,25 @@ include_file("desktop", "leaflet", "css", "Multiloc");
                                 <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible}}</label>
                             </div>
                         </div>
-
                     </fieldset>
+                                        <div class="col-sm-12">
+                        <form class="form-horizontal">
+                            <fieldset>
+                                <legend>{{Paramètres}}</legend>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{distance detection de localisation}}</label>
+                                    <div class="col-sm-2">
+                                        <input id="dist_loc" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="dist_loc" placeholder="250" value="250"/>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        metre(s)
+                                    </div>
+                                </div>
+                                
+                            </fieldset>
+                            
+                    </div>
                     
                     
                 </form>
@@ -130,7 +150,7 @@ include_file("desktop", "leaflet", "css", "Multiloc");
 
                     <thead>
                         <tr>
-                            <th>{{Nom}}</th><th>{{Type}}</th><th>{{Commande}}</th><th>{{Afficher}}</th><th>{{Action}}</th>
+                            <th>{{Nom}}</th><th>{{Type}}</th><th>{{Recherche adresse}}</th><th>{{type de loc}}</th><th>{{coordonnées GPS}}</th>
                         </tr>
                     </thead>
                     <tbody>

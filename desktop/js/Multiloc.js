@@ -24,6 +24,12 @@ $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder:
         calcul.atCaret('insert', result.human);
     });
 });
+
+
+
+
+
+
 /*
 * Fonction pour l'ajout de commande, appellé automatiquement par plugin.template
 */
@@ -35,17 +41,28 @@ function addCmdToTable(_cmd) {
     if (!isset(_cmd.configuration)) {
         _cmd.configuration = {};
     }
-       var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
-        tr += '<td>';
-        tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
-        tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="width : 140px;" placeholder="{{Nom}}">';
+ 
+      var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
+          tr += '<td>';
+  tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
+        tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="width : 160px;" placeholder="{{Nom}}">';
+  	tr += '<input class="cmdAttr form-control" type="file" id="bsImagesFileload' + init(_cmd.id) + '" name="images" data-url="plugins/Multiloc/core/ajax/Multiloc.ajax.php?action=imageUpload"/>';
+      if ($('.id' + init(_cmd.id) +'.cmdAttr[data-l1key=configuration][data-l2key=icon]') == '') {
+		$('.id' + init(_cmd.id) +'.cmdAttr[data-l1key=configuration][data-l2key=icon]').value('/plugins/Multiloc/desktop/images/defaut.png');
+        } 
+  tr += '<img src="'+ _cmd.configuration.icon +'" style="width:auto; height:50px"></a>';
+    tr += '<input class="cmdAttr  form-control input-sm id' + init(_cmd.id) + '" data-l1key="configuration" data-l2key="icon" style="display:none ">';
+  tr += '<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">'; 
         tr += '</td>';
         tr += '<td>';
         tr += '<span class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>';
         tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
         tr += '</td>';
+  		tr += '<td>';
+        tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="reverse" style="width : 140px;" placeholder="{{1}}" value="1">';
+  		tr += '</td>';
    		tr += '<td>';
-        tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="Typeloc" style="width : 140px;">';
+        tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="Typeloc" style="width : 140px;" placeholder="{{personne}}", value="personne">';
   		tr += '</td>';
   		tr += '<td><textarea class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="virtEq" style="height : 33px;" placeholder="{{Equipement}}"></textarea>';
        	tr += '<a class="btn btn-default cursor listEquipementInfo btn-sm" data-input="virtEq"><i class="fa fa-list-alt "></i> {{Rechercher équipement}}</a>';      
@@ -64,11 +81,92 @@ function addCmdToTable(_cmd) {
         tr += '</td>';
         tr += '</tr>';
         $('#table_cmd tbody').append(tr);
+   
         $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
         if (isset(_cmd.type)) {
             $('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
         }
         jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
-  
 
-    }
+        $('#bsImagesFileload' + init(_cmd.id)).fileupload({
+        dataType: 'json',
+        url: "plugins/Multiloc/core/ajax/Multiloc.ajax.php?action=imageUpload",
+        dropZone: '#bsImagesPanel' + init(_cmd.id),
+        done: function (e, data) {
+            if (data.result.state !== 'ok') {
+                $('#div_alert').showAlert({message: data.result.result, level: 'danger'});
+                return;
+            }
+		console.log($('.id' + init(_cmd.id) +'.cmdAttr'));
+		if ($('.id' + init(_cmd.id) +'.cmdAttr[data-l1key=configuration][data-l2key=icon]') == '') {
+		$('.id' + init(_cmd.id) +'.cmdAttr[data-l1key=configuration][data-l2key=icon]').value('/plugins/Multiloc/desktop/images/defaut.png');
+        } else{
+          		$('.id' + init(_cmd.id) +'.cmdAttr[data-l1key=configuration][data-l2key=icon]').value('/plugins/Multiloc/desktop/images/' + data.files[0]['name']);
+
+        }
+          $('#collapseTwo').collapse('show');
+            notify("{{Ajout d'une Image}}", '{{Image ajoutée avec succès}}', 'success');
+        }
+    });
+  
+  function updateListImages() {
+    $.ajax({
+        type: "POST",
+        url: "plugins/Multiloc/core/ajax/Multiloc.ajax.php",
+        data: {
+            action: "listImage"
+        },
+        dataType: 'json',
+        error: function (request, status, error) {
+            handleAjaxError(request, status, error);
+        },
+        success: function (data) {
+            if (data.state !== 'ok') {
+                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                return;
+            }
+            var images = '';
+            imagesWidgets = [];
+            data = data.result;
+            for (var i in data) {
+                images += '<div class="media-left col-sm-2" style="min-width: 105px">';
+                images += '<div class="well col-sm-12 noPaddingWell noPaddingLeft noPaddingRight noMarginBottom">';
+                images += '<button type="button" class="pull-left btn btn-xs btn-danger bsDelImage" data-image="' + data[i] + "\" title=\"{{Supprimer l'image}}\"><i class='fa fa-trash-o'></i></button>";
+                images += '<div class="col-sm-6 noPaddingLeft noPaddingRight text-right pull-right" id="bsViewImageSize' + i + '"></div>';
+                images += '</div>';
+                images += '<img class="img-thumbnail center-block" src="plugins/Multiloc/desktop/images/' + data[i] + '" alt="' + data[i] + '" title="' + data[i] + '" id="bsViewImage' + i + '">';
+                images += '<div class="well col-sm-12 noPaddingLeft noPaddingRight noPaddingWell text-center" id="bsViewImageWH' + i + '"></div>';
+                images += '</div>';
+                imagesWidgets.push(data[i]);
+            }
+            $('#bsImagesView'+ init(_cmd.id)).html('<div class="media">' + images + '</div>');
+            for (var i in data) {
+                addImage(data[i], i);
+            }
+        }
+    });
+}
+
+function addImage(image, index) {
+    var img = new Image();
+    img.src = "plugins/Multiloc/desktop/images/" + image + "";
+    var xhr = new XMLHttpRequest();
+    xhr.open('HEAD', img.src, true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                var size = Math.round(xhr.getResponseHeader('Content-Length') / 1024);
+                $('#bsImagesView' + init(_cmd.id)).find('#bsViewImageSize' + index).append('<strong class="text-right text-nowrap">' + size + 'Ko</strong>');
+            }
+        }
+    };
+    xhr.send(null);
+  /* img.on('load', function() {
+        $('#bsImagesView').find('#bsViewImageWH' + index).append('<strong style="font-size:12px" class="text-nowrap">H: ' + this.width + ' - L:' + this.height + '</strong>');
+    });*/
+};
+}
+
+
+
+

@@ -28,14 +28,12 @@ if (!isConnect()) {
 ?>
 <form class="form-horizontal">
     <fieldset>
-        <div class="form-group">
-            <label class="col-lg-4 control-label">{{Global param 1}}</label>
-            <div class="col-lg-2">
-                <select class="configKey form-control" data-l1key="param1">
-                    <option value="value1">{{First value}}</option>
-                </select>
-            </div>
-        </div>
+<div class="form-group">
+  <label class="col-lg-4 control-label">Email</label>
+  <div class="col-lg-4">
+  <input class="configKey form-control" data-l1key="email" style="margin-top:5px" placeholder=""/>
+  </div>
+  </div>
     </fieldset>
 </form>
 
