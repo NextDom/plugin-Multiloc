@@ -74,6 +74,36 @@ public function preSave()
 public function postSave()
 {
   
+      $cmd = $this->getCmd(null, 'lieu');
+		if (!is_object($cmd)) {
+			$cmd = new MultilocCmd();
+		}
+		$cmd->setName(__('lieu', __FILE__));
+		$cmd->setEqLogic_id($this->id);
+		$cmd->setLogicalId('lieu');
+		$cmd->setType('info');
+		$cmd->setSubType('string');
+      	$cmd->setConfiguration('Typeloc', 'lieu');
+  		$cmd->setConfiguration('reverse', '1');
+  		$cmd->setConfiguration('icon', '/plugins/Multiloc/desktop/images/house.png');
+		$cmd->save(); 
+  
+  $cmd = $this->getCmd(null, 'personne');
+		if (!is_object($cmd)) {
+			$cmd = new MultilocCmd();
+		}
+		$cmd->setName(__('personne', __FILE__));
+		$cmd->setEqLogic_id($this->id);
+		$cmd->setLogicalId('personne');
+		$cmd->setType('info');
+		$cmd->setSubType('string');
+      	$cmd->setConfiguration('Typeloc', 'personne');
+  		$cmd->setConfiguration('reverse', '1');
+  		$cmd->setConfiguration('icon', '/plugins/Multiloc/desktop/images/defaut.png');
+		$cmd->save();   
+  
+
+  
     $this->updateInfo();
 }
 
@@ -187,6 +217,8 @@ public function toHtml($_version = 'dashboard') {
         $replace['#' . $cmd->getLogicalId() . '_id_display#'] = ($cmd->getIsVisible()) ? '#' . $cmd->getName() . "_id_display#" : "none";
     }
  	$replace['#dist_loc#'] = $this->getConfiguration('dist_loc');
+   	$replace['#zoom#'] = $this->getConfiguration('zoom');
+
     return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'map', 'Multiloc')));
 
 }

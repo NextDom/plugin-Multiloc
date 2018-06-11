@@ -14,7 +14,18 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
 ?>
 
-
+<style>
+      .fileinput-button input {
+position: inline;
+    top: 0;
+    right: 0;
+    margin: -40px;
+    opacity: 0;
+    -ms-filter: 'alpha(opacity=0)';
+    cursor: pointer;
+      font-size: 40px !important;
+    direction: ltr;
+</style>
       
 <div class="row row-overflow">
     <div class="col-lg-2 col-md-3 col-sm-4">
@@ -131,6 +142,16 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <label class="col-sm-3 control-label">{{distance detection de localisation}}</label>
                                     <div class="col-sm-2">
                                         <input id="dist_loc" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="dist_loc" placeholder="250" value="250"/>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        metre(s)
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{niveau de zoom par defaut}}</label>
+                                    <div class="col-sm-2">
+                                        <input id="zoom" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="zoom" placeholder="18" value="18"/>
                                     </div>
                                     <div class="col-sm-2">
                                         metre(s)

@@ -43,15 +43,26 @@ function addCmdToTable(_cmd) {
     }
  
       var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
-          tr += '<td>';
-  tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
-        tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="width : 160px;" placeholder="{{Nom}}">';
-  	tr += '<input class="cmdAttr form-control" type="file" id="bsImagesFileload' + init(_cmd.id) + '" name="images" data-url="plugins/Multiloc/core/ajax/Multiloc.ajax.php?action=imageUpload"/>';
-      if ($('.id' + init(_cmd.id) +'.cmdAttr[data-l1key=configuration][data-l2key=icon]') == '') {
-		$('.id' + init(_cmd.id) +'.cmdAttr[data-l1key=configuration][data-l2key=icon]').value('/plugins/Multiloc/desktop/images/defaut.png');
-        } 
-  tr += '<img src="'+ _cmd.configuration.icon +'" style="width:auto; height:50px"></a>';
-    tr += '<input class="cmdAttr  form-control input-sm id' + init(_cmd.id) + '" data-l1key="configuration" data-l2key="icon" style="display:none ">';
+          tr += '<td>';  
+  				tr += '<div class="row fileupload-buttonbar" style="width : 250px;">';
+  					tr += '<div class="col-lg-9" >';
+  						tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
+        				tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" placeholder="{{Nom}}">';
+  						tr += '<span class="form-control btn-info fileinput-button">';
+   						tr += '<i class="glyphicon glyphicon-plus"></i>';
+  						tr += '<span> {{Ajouter avatar}}</span>';
+  						tr += '<input class="cmdAttr form-control" type="file" id="bsImagesFileload' + init(_cmd.id) + '" name="images" data-url="plugins/Multiloc/core/ajax/Multiloc.ajax.php?action=imageUpload"/>';
+      					if ($('.id' + init(_cmd.id) +'.cmdAttr[data-l1key=configuration][data-l2key=icon]') == '') {
+							$('.id' + init(_cmd.id) +'.cmdAttr[data-l1key=configuration][data-l2key=icon]').value('/plugins/Multiloc/desktop/images/defaut.png');
+                		} 
+  						tr += ' </span>';
+					tr += ' </div>';
+  					tr += '  <div class="col-lg-3">';
+  						tr += '<img src="'+ _cmd.configuration.icon +'" style="width:auto; height:50px"></a>';
+  					tr += ' </div>';
+
+    			tr += '<input class="cmdAttr  form-control input-sm id' + init(_cmd.id) + '" data-l1key="configuration" data-l2key="icon" style="display:none ">';
+    				tr += ' </div>';				
   tr += '<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">'; 
         tr += '</td>';
         tr += '<td>';
@@ -59,10 +70,17 @@ function addCmdToTable(_cmd) {
         tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
         tr += '</td>';
   		tr += '<td>';
-        tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="reverse" style="width : 140px;" placeholder="{{1}}" value="1">';
+		tr += '<div class="form-group">';
+        tr += '<div class="col-lg-2">';
+        tr += ' <label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="reverse"></label>';
+        tr += ' </div>';
+        tr += '</div>';
   		tr += '</td>';
    		tr += '<td>';
-        tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="Typeloc" style="width : 140px;" placeholder="{{personne}}", value="personne">';
+  		tr += '<select type="text" id="Typeloc" class="cmdAttr configuration form-control" data-l1key="configuration" data-l2key="Typeloc">';
+  		tr += '<option value="lieu">{{lieu}}</option>';
+    	tr += '<option value="personne">{{personne}}</option>';
+        tr += '</select>';
   		tr += '</td>';
   		tr += '<td><textarea class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="virtEq" style="height : 33px;" placeholder="{{Equipement}}"></textarea>';
        	tr += '<a class="btn btn-default cursor listEquipementInfo btn-sm" data-input="virtEq"><i class="fa fa-list-alt "></i> {{Rechercher équipement}}</a>';      
@@ -147,6 +165,10 @@ function addCmdToTable(_cmd) {
     });
 }
 
+  $( "#Typeloc" ).change(function(){
+     
+     
+  });
 function addImage(image, index) {
     var img = new Image();
     img.src = "plugins/Multiloc/desktop/images/" + image + "";
