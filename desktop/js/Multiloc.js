@@ -26,10 +26,6 @@ $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder:
 });
 
 
-
-
-
-
 /*
 * Fonction pour l'ajout de commande, appellé automatiquement par plugin.template
 */
@@ -52,8 +48,8 @@ function addCmdToTable(_cmd) {
    						tr += '<i class="glyphicon glyphicon-plus"></i>';
   						tr += '<span> {{Ajouter avatar}}</span>';
   						tr += '<input class="cmdAttr form-control" type="file" id="bsImagesFileload' + init(_cmd.id) + '" name="images" data-url="plugins/Multiloc/core/ajax/Multiloc.ajax.php?action=imageUpload"/>';
-      					if ($('.id' + init(_cmd.id) +'.cmdAttr[data-l1key=configuration][data-l2key=icon]') == '') {
-							$('.id' + init(_cmd.id) +'.cmdAttr[data-l1key=configuration][data-l2key=icon]').value('/plugins/Multiloc/desktop/images/defaut.png');
+      					if ($('.id' + init(_cmd.id) +' .cmdAttr[data-l1key=configuration][data-l2key=icon]') == '') {
+							$('.id' + init(_cmd.id) +' .cmdAttr[data-l1key=configuration][data-l2key=icon]').value('/plugins/Multiloc/desktop/images/defaut.png');
                 		} 
   						tr += ' </span>';
 					tr += ' </div>';

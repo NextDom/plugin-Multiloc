@@ -158,6 +158,20 @@ position: inline;
                                     </div>
                                 </div>
                                 
+        	<div class="form-group">
+            	<label class="col-sm-2 control-label">{{Centrage de la carte}}</label>
+            	<div class="col-sm-3">
+                	<select class="form-control eqLogicAttr configuration" data-l1key="configuration" data-l2key="map_center">
+                    <?php
+					foreach (eqLogic::byType('Multiloc', true) as $map) {
+                    foreach ($map->getCmd('info') as $cmd) {
+					echo '<option value="' . $cmd->getConfiguration("position") . '">' . $cmd->getName() . '</option>';
+                    }
+					}
+					?>
+              		</select>
+          		</div>
+      		</div>  
                             </fieldset>
                             
                     </div>

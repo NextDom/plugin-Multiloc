@@ -139,7 +139,6 @@ public function updateInfo()
             $cmd->setConfiguration('position', $cmd_value);
             $cmd->save();
             $this->updateGeocoding($cmd->getConfiguration('position'), $cmd);
-          	$this->checkAndUpdateCmd('position', $cmd->getConfiguration('position'));
 
         }
     }
@@ -149,8 +148,8 @@ public function updateInfo()
 public function updateGeocoding($geoloc, $cmd) {
     log::add('Multiloc', 'debug', 'Coordonnées ' . $geoloc);
     if ($geoloc == '' || strrpos($geoloc, ',') === false) {
-        log::add('Multiloc', 'error', 'Coordonnées invalides ' . $geoloc);
-        return true;
+        log::add('Multiloc', 'debug', 'Format de coordonnées non valide');
+
     }
     $loc = explode(',',$geoloc);
     $lat = $loc[0];
@@ -198,11 +197,11 @@ public function toHtml($_version = 'dashboard') {
     foreach ($this->getCmd('info') as $cmd) {
 
         if ($cmd->getConfiguration("Typeloc") == "personne"){
-            log::add('Multiloc', 'debug', 'Typeloc: ' .$cmd->getConfiguration("Typeloc"));
           $icon = $icon . 'var icon'.$cmd->getName() .' = L.divIcon({html:"<img src=\"'.$cmd->getConfiguration("icon").'\" />",className: "image-icon",iconSize:     [40, 40], iconAnchor:[20, 20]});';
           $replace['#icons#'] = $replace['#icons#'] . $icon;
 		  $personne = $personne .'L.marker(['. $cmd->getConfiguration("position") .'], {icon: icon'.$cmd->getName() .'}).addTo(map'. $cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'"); ';
-            $replace['#'.$cmd->getConfiguration("Typeloc").'#'] = $replace['#'.$cmd->getConfiguration("Typeloc").'#'] .  $personne;
+          	$replace['#'.$cmd->getConfiguration("Typeloc").'#'] = $replace['#'.$cmd->getConfiguration("Typeloc").'#'] .  $personne;
+   
         }elseif ($cmd->getConfiguration("Typeloc") == "lieu"){
             log::add('Multiloc', 'debug', 'Typeloc: ' .$cmd->getConfiguration("typeloc"));
            	$icon = $icon . 'var icon'.$cmd->getName() .' = L.icon({iconUrl: "'.$cmd->getConfiguration("icon").'",iconSize:     [40, 40], iconAnchor:   [20, 20]});';	
@@ -214,10 +213,10 @@ public function toHtml($_version = 'dashboard') {
         if ($cmd->getIsHistorized() == 1) {
             $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
         }
-        $replace['#' . $cmd->getLogicalId() . '_id_display#'] = ($cmd->getIsVisible()) ? '#' . $cmd->getName() . "_id_display#" : "none";
     }
  	$replace['#dist_loc#'] = $this->getConfiguration('dist_loc');
    	$replace['#zoom#'] = $this->getConfiguration('zoom');
+  	$replace['#map_center#'] = $this->getConfiguration('map_center');
 
     return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'map', 'Multiloc')));
 
