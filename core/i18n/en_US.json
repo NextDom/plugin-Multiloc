@@ -1,0 +1,32 @@
+{
+  "plugins\/Multiloc\/desktop\/php\/Multiloc.php": {
+    "Action": "Action",
+    "Activer": "Activate",
+    "Ajouter": "Add",
+    "Ajouter un Multiloc": "Add a Multiloc",
+    "Aucun": "Nothing",
+    "Catégorie": "Category",
+    "Commandes": "Commands",
+    "Configuration": "Configuration",
+    "Configuration avancée": "Advanced configuration",
+    "Equipement": "Equipment",
+    "Gestion": "Management",
+    "Mes Multilocs": "My Multilocs",
+    "Nom": "Name",
+    "Nom de l'équipement Multiloc": "Name of the Multiloc equipment",
+    "Objet parent": "Parent object",
+    "Rechercher": "Find",
+    "Sauvegarder": "Save",
+    "Supprimer": "Delete",
+    "Type": "Type",
+    "Visible": "Visible"
+  },
+  "plugins\/Multiloc\/plugin_info\/configuration.php": {
+    "Global param 1": "First global parameter",
+    "Global param 2": "Second global parameter",
+    "Global param 3": "Third global parameter",
+    "Default value": "Default value",
+    "First value": "First value",
+    "Second value": "Second value"
+  }
+}
