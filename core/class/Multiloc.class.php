@@ -68,26 +68,32 @@ public function postInsert()
 
 public function preSave()
 {
-
+if($this->getConfiguration('dist_loc') ==''){
+    throw new \Exception(__('distance detection de localisation doit etre renseignée', __FILE__));
+  }
+if($this->getConfiguration('zoom') ==''){
+    throw new \Exception(__('niveau de zoom par defaut doit etre renseigné', __FILE__));
+  }
 }
 
 public function postSave()
 {
-  
-      $cmd = $this->getCmd(null, 'lieu');
+
+      $cmd = $this->getCmd(null, 'Maison');
 		if (!is_object($cmd)) {
 			$cmd = new MultilocCmd();
 		}
-		$cmd->setName(__('lieu', __FILE__));
+		$cmd->setName(__('Maison', __FILE__));
 		$cmd->setEqLogic_id($this->id);
-		$cmd->setLogicalId('lieu');
+		$cmd->setLogicalId('Maison');
 		$cmd->setType('info');
 		$cmd->setSubType('string');
       	$cmd->setConfiguration('Typeloc', 'lieu');
   		$cmd->setConfiguration('reverse', '1');
   		$cmd->setConfiguration('icon', '/plugins/Multiloc/desktop/images/house.png');
-		$cmd->save(); 
-  
+  		$cmd->setConfiguration('position', '');
+		$cmd->save();
+
   $cmd = $this->getCmd(null, 'personne');
 		if (!is_object($cmd)) {
 			$cmd = new MultilocCmd();
@@ -100,8 +106,9 @@ public function postSave()
       	$cmd->setConfiguration('Typeloc', 'personne');
   		$cmd->setConfiguration('reverse', '1');
   		$cmd->setConfiguration('icon', '/plugins/Multiloc/desktop/images/defaut.png');
-		$cmd->save();   
- 
+  		$cmd->setConfiguration('position', '');
+		$cmd->save();
+
     $this->updateInfo();
 }
 
@@ -208,12 +215,12 @@ public function toHtml($_version = 'dashboard') {
                 log::add('Multiloc', 'debug', 'Erreur: position non conforme pour ' .$cmd->getName());
 
         }else{
-             $icon = $icon . 'var icon'.$cmd->getName() .' = L.icon({iconUrl: "'.$cmd->getConfiguration("icon").'",iconSize:     [40, 40], iconAnchor:   [20, 20]});';	
+             $icon = $icon . 'var icon'.$cmd->getName() .' = L.icon({iconUrl: "'.$cmd->getConfiguration("icon").'",iconSize:     [40, 40], iconAnchor:   [20, 20]});';
             }
           $replace['#'.$cmd->getConfiguration("Typeloc").'#'] = $replace['#'.$cmd->getConfiguration("Typeloc").'#'] . 'L.marker(['. $cmd->getConfiguration("position") .'], {icon: icon'.$cmd->getName() .'}).addTo(map'. $cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");L.circle(['. $cmd->getConfiguration("position") .'], '.$this->getConfiguration('dist_loc').', {color: "red",fillColor: "#f03",fillOpacity: 0.5}).addTo(map'.$cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");';
 
         }
-          
+
         $replace['#' . $cmd->getLogicalId() . '_collect#'] = $cmd->getCollectDate();
 
         if ($cmd->getIsHistorized() == 1) {
@@ -222,7 +229,11 @@ public function toHtml($_version = 'dashboard') {
     }
  	$replace['#dist_loc#'] = $this->getConfiguration('dist_loc');
    	$replace['#zoom#'] = $this->getConfiguration('zoom');
-  	$replace['#map_center#'] = $this->getConfiguration('map_center');
+  if (!preg_match('/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?),[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/', $this->getConfiguration('map_center'))){
+  	$replace['#map_center#'] = '48.8620645,2.3587779';
+  }else{
+    $replace['#map_center#'] = $this->getConfiguration('map_center');
+  }
 
     return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'map', 'Multiloc')));
 
