@@ -49,9 +49,9 @@ function addCmdToTable(_cmd) {
     if (!isset(_cmd.configuration)) {
         _cmd.configuration = {};
     }
- 
+
       var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
-          tr += '<td>';  
+          tr += '<td>';
   				tr += '<div class="row fileupload-buttonbar" style="width : 250px;">';
   					tr += '<div class="col-lg-9" >';
   						tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
@@ -67,13 +67,13 @@ function addCmdToTable(_cmd) {
   					tr += ' </div>';
 
     			tr += '<input class="cmdAttr  form-control input-sm id' + init(_cmd.id) + '" data-l1key="configuration" data-l2key="icon" style="display:none ">';
-    				tr += ' </div>';				
-  tr += '<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">'; 
+    				tr += ' </div>';
+  tr += '<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">';
         tr += '</td>';
-
-       tr += '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="info"  disabled style="margin-bottom : 5px; display:none" />';
-       tr += '<input class="cmdAttr form-control type input-sm" data-l1key="subType" value="string" disabled style="margin-bottom : 5px; display:none" />';
-
+tr += '<td>';
+       tr += '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="info"  disabled style="margin-bottom : 5px; " />';
+       tr += '<input class="cmdAttr form-control type input-sm" data-l1key="subType" value="string" disabled style="margin-bottom : 5px; " />';
+tr += '</td>';
   		tr += '<td>';
 		tr += '<div class="form-group">';
         tr += '<div class="col-lg-2">';
@@ -88,7 +88,7 @@ function addCmdToTable(_cmd) {
         tr += '</select>';
   		tr += '</td>';
   		tr += '<td><textarea class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="virtEq" style="height : 33px;" placeholder="{{Equipement}}"></textarea>';
-       	tr += '<a class="btn btn-default cursor listEquipementInfo btn-sm" data-input="virtEq"><i class="fa fa-list-alt "></i> {{Rechercher équipement}}</a>';      
+       	tr += '<a class="btn btn-default cursor listEquipementInfo btn-sm" data-input="virtEq"><i class="fa fa-list-alt "></i> {{Rechercher équipement}}</a>';
   		tr += '</td>';
         tr += '<td style="width: 150px;">';
         tr += '<span><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isVisible" checked/> {{Afficher}}<br/></span>';
@@ -104,16 +104,14 @@ function addCmdToTable(_cmd) {
         tr += '</td>';
         tr += '</tr>';
         $('#table_cmd tbody').append(tr);
-   
+
         $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
         if (isset(_cmd.type)) {
-            $('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
+           $('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
            $('#table_cmd tbody tr:last .cmdAttr[data-l1key=subType]').value(init(_cmd.subType));
-           $('#table_cmd tbody tr:last .cmdAttr[data-l1key=configuration][data-l2key=icon]').value('/plugins/Multiloc/desktop/images/defaut.png');
-
         }
         jeedom.cmd.changeType($('#table_cmd tbody tr:last'), 'string');
-  
+
         $('#bsImagesFileload' + init(_cmd.id)).fileupload({
         dataType: 'json',
         url: "plugins/Multiloc/core/ajax/Multiloc.ajax.php?action=imageUpload",
@@ -128,7 +126,7 @@ function addCmdToTable(_cmd) {
             notify("{{Ajout d'une Image}}", '{{Image ajoutée avec succès}}', 'success');
         }
     });
-  
+
   function updateListImages() {
     $.ajax({
         type: "POST",
@@ -168,8 +166,8 @@ function addCmdToTable(_cmd) {
 }
 
   $( "#Typeloc" ).change(function(){
-     
-     
+
+
   });
 function addImage(image, index) {
     var img = new Image();
@@ -190,7 +188,3 @@ function addImage(image, index) {
     });*/
 };
 }
-
-
-
-
