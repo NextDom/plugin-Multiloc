@@ -101,9 +101,7 @@ public function postSave()
   		$cmd->setConfiguration('reverse', '1');
   		$cmd->setConfiguration('icon', '/plugins/Multiloc/desktop/images/defaut.png');
 		$cmd->save();   
-  
-
-  
+ 
     $this->updateInfo();
 }
 
@@ -177,8 +175,6 @@ public function updateData($jsondata, $cmd) {
     $cmd->setConfiguration('rue', $jsondata['address']['road']);
     $cmd->setConfiguration('ville', $jsondata['address']['town']);
     $cmd->setConfiguration('codepostale', $jsondata['address']['postcode']);
-    log::add('Multiloc', 'debug', 'adresse: ' . $jsondata['address']['road'] . " " . $jsondata['address']['town']. " ". $jsondata['address']['postcode']);
-
     $cmd->save();
 }
 //Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
@@ -197,17 +193,27 @@ public function toHtml($_version = 'dashboard') {
     foreach ($this->getCmd('info') as $cmd) {
 
         if ($cmd->getConfiguration("Typeloc") == "personne"){
-          $icon = $icon . 'var icon'.$cmd->getName() .' = L.divIcon({html:"<img src=\"'.$cmd->getConfiguration("icon").'\" />",className: "image-icon",iconSize:     [40, 40], iconAnchor:[20, 20]});';
+        	if (!preg_match('/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?),[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/', $cmd->getConfiguration("position"))) {
+                 log::add('Multiloc', 'debug', 'Erreur: position non conforme pour ' .$cmd->getName());
+				 $icon = '';
+        	}else{
+             $icon = $icon . 'var icon'.$cmd->getName() .' = L.divIcon({html:"<img src=\"'.$cmd->getConfiguration("icon").'\" />",className: "image-icon",iconSize:     [40, 40], iconAnchor:[20, 20]});';
+		  	 $personne = $personne .'L.marker(['. $cmd->getConfiguration("position") .'], {icon: icon'.$cmd->getName() .'}).addTo(map'. $cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'"); ';
+        	}
           $replace['#icons#'] = $replace['#icons#'] . $icon;
-		  $personne = $personne .'L.marker(['. $cmd->getConfiguration("position") .'], {icon: icon'.$cmd->getName() .'}).addTo(map'. $cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'"); ';
-          	$replace['#'.$cmd->getConfiguration("Typeloc").'#'] = $replace['#'.$cmd->getConfiguration("Typeloc").'#'] .  $personne;
-   
+          $replace['#'.$cmd->getConfiguration("Typeloc").'#'] = $replace['#'.$cmd->getConfiguration("Typeloc").'#'] .  $personne;
+
         }elseif ($cmd->getConfiguration("Typeloc") == "lieu"){
-            log::add('Multiloc', 'debug', 'Typeloc: ' .$cmd->getConfiguration("typeloc"));
-           	$icon = $icon . 'var icon'.$cmd->getName() .' = L.icon({iconUrl: "'.$cmd->getConfiguration("icon").'",iconSize:     [40, 40], iconAnchor:   [20, 20]});';	
-            $replace['#'.$cmd->getConfiguration("Typeloc").'#'] = $replace['#'.$cmd->getConfiguration("Typeloc").'#'] . 'L.marker(['. $cmd->getConfiguration("position") .'], {icon: icon'.$cmd->getName() .'}).addTo(map'. $cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");L.circle(['. $cmd->getConfiguration("position") .'], '.$this->getConfiguration('dist_loc').', {color: "red",fillColor: "#f03",fillOpacity: 0.5}).addTo(map'.$cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");';
+          	if ($cmd->getConfiguration("position") == '' || strrpos($cmd->getConfiguration("position"), ',') == false) {
+                log::add('Multiloc', 'debug', 'Erreur: position non conforme pour ' .$cmd->getName());
+
+        }else{
+             $icon = $icon . 'var icon'.$cmd->getName() .' = L.icon({iconUrl: "'.$cmd->getConfiguration("icon").'",iconSize:     [40, 40], iconAnchor:   [20, 20]});';	
+            }
+          $replace['#'.$cmd->getConfiguration("Typeloc").'#'] = $replace['#'.$cmd->getConfiguration("Typeloc").'#'] . 'L.marker(['. $cmd->getConfiguration("position") .'], {icon: icon'.$cmd->getName() .'}).addTo(map'. $cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");L.circle(['. $cmd->getConfiguration("position") .'], '.$this->getConfiguration('dist_loc').', {color: "red",fillColor: "#f03",fillOpacity: 0.5}).addTo(map'.$cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");';
 
         }
+          
         $replace['#' . $cmd->getLogicalId() . '_collect#'] = $cmd->getCollectDate();
 
         if ($cmd->getIsHistorized() == 1) {

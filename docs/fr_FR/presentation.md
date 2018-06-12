@@ -1,23 +1,21 @@
+![icon](../images/Multiloc_icon.png)
+
 # Description
 
-Plugin permettant de ....
+Plugin permettant visualisation des coordonnées GPS sur une seule carte
 
-description
+### Fonctions disponibles
+Infos :
+* Visualisation de plusieurs coordonnées GPS sur une seule carte
+* Recherche d'adresses
 
 # Market
 
-Retrouvez le sur le [Market](https://www.jeedom.com/market/index.php?v=d&p=market&type=plugin&&name=Plugin) Jeedom
-
-~~Changer **_Plugin_** par le nom du plugin dans l'adresse https du lien~~
 
 # Prévisualisation
 
-~~Insérer un screenshot du plugin en mode desktop~~
+![Screenshot1](../images/Screenshot1.png)
 
-![screenshot1](../images/Multiloc_icon.png)
+![Screenshot2](../images/Screenshot2.png)
 
-# Forum
-
-Lien vers le [Forum](https://www.jeedom.com/forum/viewtopic.php?t=xxxx)
-
-~~Remplacer `t=xxxx` par le bon numéro de forum~~
+Lien vers le [Forum](https://www.nextdom.org/community/plugin-multiloc)

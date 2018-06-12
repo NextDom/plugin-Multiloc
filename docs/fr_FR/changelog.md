@@ -1,27 +1,25 @@
-# Idées pour de futures releases
+# Idées pour les versions suivantes :
 
-~~chapitre à garder seulement pour les idées sur lesquelles aucun développement n'est prévu actuellement~~
 
-# Prochaine release
+# Prochaine version
 
-~~chapitre à garder seulement si une version développement est en cours~~
+Ajout des fonctionnalités suivantes:
+    - Calcul de la distance entre les points GPS
+    - Rendre le plugin autonome sur l'acquisitions des coordonnées GPS
 
 # Changelog
 
-### Version 1.2.0:  (**_date_** - Version en cours sur le market)
+### Version 0.1.2:  (12/06/2018 - Version Beta)
 
-* Modification 1
+* Correction bug sur coloration de l'icon power lorsque l'appareil est allumé
+* Refonte du core pour la gestion des commandes et applications
+    - Les commandes sont gérées par le fichier commandes.json
+    - Les applications sont gérées par le fichier appli.json
+Cela permet d'ajouter des commandes et applications sans modifier le core du plugin.
 
-### Version 1.1.1:  (**_date_** ~~ex: 31 Mai 2017~~)
+### Version 0.1.1:  (26/04/2018)
 
-* Modification 1
-* Modification 2
-
-### Version 1.1.0:  (**_date_**)
-
-* Modification 1
-* Modification 2
-* Modification 3
+* 1ere BÊTA
 
 ### Détail des changements
 
@@ -29,7 +27,6 @@ Détail complet des mises à jour sur [Historique Commit](https://github.com/Nex
 
 # Bug
 
-En cas de problèmes avec ce plugin il est possible d'ouvrir un ticket pour demander une correction :
+En cas de problèmes avec ce plugin, il est possible d'ouvrir un ticket pour demander une correction :
 
 [https://github.com/NextDom/plugin-Multiloc/issues](https://github.com/NextDom/plugin-Multiloc/issues)
-~~Remplacer le lien vers le bugtracker du plugin~~

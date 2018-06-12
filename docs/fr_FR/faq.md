@@ -1,10 +1,5 @@
 # FAQ
 
-### Question 1 ?
+### Le plugin est gratuit, le restera t il ?
 
-
-Réponse 1.
-
-### Question 2 ?
-
-Réponse 2
+> Bien sûr, nous ne jurons que par du libre, du gratuit et de l'Open Source.
