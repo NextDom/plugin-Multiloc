@@ -9,7 +9,7 @@ Ajout des fonctionnalités suivantes:
 
 # Changelog
 
-### Version 0.1.2:  (12/06/2018 - Version Beta)
+### Version 0.1.2:  (12/06/2018 - Version Stable)
 
 * Correction bug sur coloration de l'icon power lorsque l'appareil est allumé
 * Refonte du core pour la gestion des commandes et applications
