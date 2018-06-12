@@ -14,8 +14,8 @@ Infos :
 
 # Prévisualisation
 
-![Screenshot1](../images/Screenshot1.png)
+![screenshot1](../images/screenshot1.png)
 
-![Screenshot2](../images/Screenshot2.png)
+![screenshot2](../images/screenshot2.png)
 
 Lien vers le [Forum](https://www.nextdom.org/community/plugin-multiloc)
