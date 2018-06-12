@@ -68,12 +68,7 @@ public function postInsert()
 
 public function preSave()
 {
-if($this->getConfiguration('dist_loc') ==''){
-    throw new \Exception(__('distance detection de localisation doit etre renseignée', __FILE__));
-  }
-if($this->getConfiguration('zoom') ==''){
-    throw new \Exception(__('niveau de zoom par defaut doit etre renseigné', __FILE__));
-  }
+
 }
 
 public function postSave()
@@ -116,7 +111,12 @@ public function postSave()
 
 public function preUpdate()
 {
-
+    if($this->getConfiguration('dist_loc') ==''){
+        throw new \Exception(__('distance detection de localisation doit etre renseignée', __FILE__));
+      }
+    if($this->getConfiguration('zoom') ==''){
+        throw new \Exception(__('niveau de zoom par defaut doit etre renseigné', __FILE__));
+      }
 }
 
 public function postUpdate()
