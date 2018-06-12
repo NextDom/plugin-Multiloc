@@ -151,7 +151,7 @@ position: inline;
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">{{niveau de zoom par defaut}}</label>
                                     <div class="col-sm-2">
-                                        <input id="zoom" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="zoom" placeholder="18" value="18"/>
+                                        <input id="zoom" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="zoom" value="18"/>
                                     </div>
                                     <div class="col-sm-2">
                                         metre(s)
@@ -161,15 +161,8 @@ position: inline;
         	<div class="form-group">
             	<label class="col-sm-2 control-label">{{Centrage de la carte}}</label>
             	<div class="col-sm-3">
-                	<select class="form-control eqLogicAttr configuration" data-l1key="configuration" data-l2key="map_center">
-                    <?php
-					foreach (eqLogic::byType('Multiloc', true) as $map) {
-                    foreach ($map->getCmd('info') as $cmd) {
-					echo '<option value="' . $cmd->getConfiguration("position") . '">' . $cmd->getName() . '</option>';
-                    }
-					}
-					?>
-              		</select>
+                  <input id="dist_loc" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="map_center" disabled/>
+
           		</div>
       		</div>  
                             </fieldset>
@@ -181,11 +174,11 @@ position: inline;
             </div>
             <div role="tabpanel" class="tab-pane" id="commandtab">
                 <table id="table_cmd" class="table table-bordered table-condensed">
-                                <a class="btn btn-success btn-sm cmdAction pull-right addAppli" data-action="add" style="margin-top:5px;"><i class="fa fa-plus-circle"></i> {{commande}}</a><br/><br/>
+                                <a class="btn btn-success btn-sm cmdAction pull-right bt_addlocate" data-action="add" style="margin-top:5px;"><i class="fa fa-plus-circle"></i> {{commande}}</a><br/><br/>
 
                     <thead>
                         <tr>
-                            <th>{{Nom}}</th><th>{{Type}}</th><th>{{Recherche adresse}}</th><th>{{type de loc}}</th><th>{{coordonnées GPS}}</th>
+                            <th>{{Nom}}</th><th>{{Recherche adresse}}</th><th>{{type de loc}}</th><th>{{coordonnées GPS}}</th>
                         </tr>
                     </thead>
                     <tbody>
