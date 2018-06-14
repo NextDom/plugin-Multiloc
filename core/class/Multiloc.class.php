@@ -34,17 +34,17 @@ class Multiloc extends eqLogic
         foreach (eqLogic::byType('Multiloc', true) as $eqLogic) {
             $eqLogic->updateInfo();
         }
-        $eqLogic->refreshWidget();
     }
 
+ public static function cron5() {
 
+$eqLogic->GetCenterFromDegrees();
+    }
 
-    /*
-    * Fonction exécutée automatiquement toutes les heures par Jeedom
-    public static function cronHourly() {
-
+/*  Fonction exécutée automatiquement toutes les heures par Jeedom */
+public static function cronHourly() {
 }
-*/
+
 
 /*
 * Fonction exécutée automatiquement tous les jours par Jeedom
@@ -73,37 +73,8 @@ public function preSave()
 
 public function postSave()
 {
-
-      $cmd = $this->getCmd(null, 'Maison');
-		if (!is_object($cmd)) {
-			$cmd = new MultilocCmd();
-		}
-		$cmd->setName(__('Maison', __FILE__));
-		$cmd->setEqLogic_id($this->id);
-		$cmd->setLogicalId('Maison');
-		$cmd->setType('info');
-		$cmd->setSubType('string');
-      	$cmd->setConfiguration('Typeloc', 'lieu');
-  		$cmd->setConfiguration('reverse', '1');
-  		$cmd->setConfiguration('icon', '/plugins/Multiloc/desktop/images/house.png');
-  		$cmd->setConfiguration('position', '');
-		$cmd->save();
-
-  $cmd = $this->getCmd(null, 'personne');
-		if (!is_object($cmd)) {
-			$cmd = new MultilocCmd();
-		}
-		$cmd->setName(__('personne', __FILE__));
-		$cmd->setEqLogic_id($this->id);
-		$cmd->setLogicalId('personne');
-		$cmd->setType('info');
-		$cmd->setSubType('string');
-      	$cmd->setConfiguration('Typeloc', 'personne');
-  		$cmd->setConfiguration('reverse', '1');
-  		$cmd->setConfiguration('icon', '/plugins/Multiloc/desktop/images/defaut.png');
-  		$cmd->setConfiguration('position', '');
-		$cmd->save();
-
+  
+       
     $this->updateInfo();
 }
 
@@ -111,12 +82,12 @@ public function postSave()
 
 public function preUpdate()
 {
-    if($this->getConfiguration('dist_loc') ==''){
-        throw new \Exception(__('distance detection de localisation doit etre renseignée', __FILE__));
-      }
-    if($this->getConfiguration('zoom') ==''){
-        throw new \Exception(__('niveau de zoom par defaut doit etre renseigné', __FILE__));
-      }
+if($this->getConfiguration('dist_loc') ==''){
+    throw new \Exception(__('distance detection de localisation doit etre renseignée', __FILE__));
+  }
+if($this->getConfiguration('zoom') ==''){
+    throw new \Exception(__('niveau de zoom par defaut doit etre renseigné', __FILE__));
+  }
 }
 
 public function postUpdate()
@@ -147,28 +118,71 @@ public function updateInfo()
 
         }
     }
-
+        $this->refreshWidget();
 }
 
+  function GetCenterFromDegrees()
+{
+$data = array();
+    foreach ($this->getCmd('info') as $cmd) {
+        $data[] = array($cmd->getConfiguration("lat"), $cmd->getConfiguration("lon"));
+    }
+
+    if (!is_array($data)) {
+      throw new \Exception(__('erreur d\'array', __FILE__));
+    }
+
+    $num_coords = count($data);
+
+    $X = 0.0;
+    $Y = 0.0;
+    $Z = 0.0;
+
+    foreach ($data as $coord)
+    {
+        $lat = $coord[0] * pi() / 180;
+        $lon = $coord[1] * pi() / 180;
+        $a = cos($lat) * cos($lon);
+        $b = cos($lat) * sin($lon);
+        $c = sin($lat);
+
+        $X += $a;
+        $Y += $b;
+        $Z += $c;
+    }
+
+    $X /= $num_coords;
+    $Y /= $num_coords;
+    $Z /= $num_coords;
+
+    $lon = atan2($Y, $X);
+    $hyp = sqrt($X * $X + $Y * $Y);
+    $lat = atan2($Z, $hyp);
+    $this->setConfiguration('map_center', $lat * 180 / pi(). ',' . $lon * 180 / pi());
+    $this->save();
+    log::add('Multiloc', 'debug', $lat * 180 / pi(). ',' . $lon * 180 / pi());
+
+}
+  
+
 public function updateGeocoding($geoloc, $cmd) {
-    log::add('Multiloc', 'debug', 'Coordonnées ' . $geoloc);
     if ($geoloc == '' || strrpos($geoloc, ',') === false) {
         log::add('Multiloc', 'debug', 'Format de coordonnées non valide');
 
     }
     $loc = explode(',',$geoloc);
-    $lat = $loc[0];
-    $lon = $loc[1];
+  	$cmd->setConfiguration('lat', $loc[0]);
+  	$cmd->setConfiguration('lon', $loc[1]);
+  	$cmd->save();
     if (config::byKey('email', 'Multiloc') == '') {
         log::add('Multiloc', 'debug', 'Vous devez remplir votre email dans la page de configuration');
         return;
     }
     if ($cmd->getConfiguration('reverse')) {
-        $url = 'https://nominatim.openstreetmap.org/reverse.php?format=jsonv2&addressdetails=1&lat='.$lat.'&lon='.$lon.'&&email='.$this->getConfiguration('email') ;
-        $request_http = new com_http($url);
-        $data = $request_http->exec(30);
+        $url = 'https://nominatim.openstreetmap.org/reverse.php?format=jsonv2&addressdetails=1&lat='.$loc[0].'&lon='.$loc[1].'&email='.config::byKey('email', 'Multiloc') ;
+        $data =  file_get_contents($url);
         if (!is_string($data) || !is_array(json_decode($data, true)) || (json_last_error() !== JSON_ERROR_NONE)) {
-            log::add('Multiloc', 'debug', 'Erreur  ' . $url);
+            log::add('Multiloc', 'debug', 'Erreur  url  ' . $url);
         }
         $jsondata = json_decode($data, true);
     } else {
@@ -199,34 +213,34 @@ public function toHtml($_version = 'dashboard') {
 
     foreach ($this->getCmd('info') as $cmd) {
 
-        if ($cmd->getConfiguration("Typeloc") == "personne"){
+if ($cmd->getConfiguration("Typeloc") == "lieu"){
+          	if ($cmd->getConfiguration("position") == '' || strrpos($cmd->getConfiguration("position"), ',') == false) {
+                log::add('Multiloc', 'debug', 'Erreur: position non conforme pour ' .$cmd->getName());
+				$icon = $icon .'';
+              	$lieu = $lieu .'';
+        }else{
+             $icon = $icon . 'var icon'.$cmd->getName() .' = L.icon({iconUrl: "'.$cmd->getConfiguration("icon").'",iconSize:     [40, 40], iconAnchor:   [20, 20]});';	
+            $lieu = $lieu . 'L.marker(['. $cmd->getConfiguration("position") .'], {icon: icon'.$cmd->getName() .'}).addTo(map'. $cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");L.circle(['. $cmd->getConfiguration("position") .'], '.$this->getConfiguration('dist_loc').', {color: "red",fillColor: "#f03",fillOpacity: 0.5}).addTo(map'.$cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");';
+            }
+        }else {
         	if (!preg_match('/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?),[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/', $cmd->getConfiguration("position"))) {
                  log::add('Multiloc', 'debug', 'Erreur: position non conforme pour ' .$cmd->getName());
-				 $icon = '';
+				 $icon = $icon . '';
+              	 $personne = $personne .'';
         	}else{
              $icon = $icon . 'var icon'.$cmd->getName() .' = L.divIcon({html:"<img src=\"'.$cmd->getConfiguration("icon").'\" />",className: "image-icon",iconSize:     [40, 40], iconAnchor:[20, 20]});';
 		  	 $personne = $personne .'L.marker(['. $cmd->getConfiguration("position") .'], {icon: icon'.$cmd->getName() .'}).addTo(map'. $cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'"); ';
         	}
-          $replace['#icons#'] = $replace['#icons#'] . $icon;
-          $replace['#'.$cmd->getConfiguration("Typeloc").'#'] = $replace['#'.$cmd->getConfiguration("Typeloc").'#'] .  $personne;
-
-        }elseif ($cmd->getConfiguration("Typeloc") == "lieu"){
-          	if ($cmd->getConfiguration("position") == '' || strrpos($cmd->getConfiguration("position"), ',') == false) {
-                log::add('Multiloc', 'debug', 'Erreur: position non conforme pour ' .$cmd->getName());
-
-        }else{
-             $icon = $icon . 'var icon'.$cmd->getName() .' = L.icon({iconUrl: "'.$cmd->getConfiguration("icon").'",iconSize:     [40, 40], iconAnchor:   [20, 20]});';
-            }
-          $replace['#'.$cmd->getConfiguration("Typeloc").'#'] = $replace['#'.$cmd->getConfiguration("Typeloc").'#'] . 'L.marker(['. $cmd->getConfiguration("position") .'], {icon: icon'.$cmd->getName() .'}).addTo(map'. $cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");L.circle(['. $cmd->getConfiguration("position") .'], '.$this->getConfiguration('dist_loc').', {color: "red",fillColor: "#f03",fillOpacity: 0.5}).addTo(map'.$cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");';
 
         }
-
-        $replace['#' . $cmd->getLogicalId() . '_collect#'] = $cmd->getCollectDate();
 
         if ($cmd->getIsHistorized() == 1) {
             $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
         }
     }
+  	$replace['#lieu#'] = $lieu;
+   	$replace['#personne#'] = $personne;
+	$replace['#icons#'] =  $icon;
  	$replace['#dist_loc#'] = $this->getConfiguration('dist_loc');
    	$replace['#zoom#'] = $this->getConfiguration('zoom');
   if (!preg_match('/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?),[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/', $this->getConfiguration('map_center'))){
