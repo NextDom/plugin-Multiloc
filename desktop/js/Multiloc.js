@@ -33,10 +33,7 @@ $("#table_cmd").delegate(".listEquipementInfo", 'click', function () {
     });
 });
 
- $("#bt_addlocate").on('click', function (event) {
-    var _cmd = {type: 'info', subType: 'string'};
-    addCmdToTable(_cmd);
-});
+
 
 /*
 * Fonction pour l'ajout de commande, appellé automatiquement par plugin.template
@@ -49,7 +46,7 @@ function addCmdToTable(_cmd) {
     if (!isset(_cmd.configuration)) {
         _cmd.configuration = {};
     }
-
+  
       var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
           tr += '<td>';
   				tr += '<div class="row fileupload-buttonbar" style="width : 250px;">';
@@ -62,18 +59,27 @@ function addCmdToTable(_cmd) {
   						tr += '<input class="cmdAttr form-control" type="file" id="bsImagesFileload' + init(_cmd.id) + '" name="images" data-url="plugins/Multiloc/core/ajax/Multiloc.ajax.php?action=imageUpload"/>';
   						tr += ' </span>';
 					tr += ' </div>';
-  					tr += '  <div class="col-lg-3">';
+   				 if (isset(_cmd.configuration.icon)) {
+                    tr += '  <div class="col-lg-3">';
   						tr += '<img src="'+ _cmd.configuration.icon +'" style="width:auto; height:50px"></a>';
   					tr += ' </div>';
+      tr += '<input class="cmdAttr  form-control input-sm id' + init(_cmd.id) + '" data-l1key="configuration" data-l2key="icon" style="display:none ">';
+  	}else{
+		tr += '<input class="cmdAttr  form-control input-sm id' + init(_cmd.id) + '" data-l1key="configuration" data-l2key="icon" value="/plugins/Multiloc/desktop/images/defaut.png" style="display:none ">';
+      tr += '  <div class="col-lg-3">';
+  		tr += '<img src="/plugins/Multiloc/desktop/images/defaut.png" style="width:auto; height:50px"></a>';
+  		tr += ' </div>';
 
-    			tr += '<input class="cmdAttr  form-control input-sm id' + init(_cmd.id) + '" data-l1key="configuration" data-l2key="icon" style="display:none ">';
-    				tr += ' </div>';
-  tr += '<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">';
+    }
+  					
+    			
+    				tr += ' </div>';				
+  tr += '<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">'; 
         tr += '</td>';
-tr += '<td>';
-       tr += '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="info"  disabled style="margin-bottom : 5px; " />';
-       tr += '<input class="cmdAttr form-control type input-sm" data-l1key="subType" value="string" disabled style="margin-bottom : 5px; " />';
-tr += '</td>';
+        tr += '<td>';
+  tr += '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="info"  disabled style="margin-bottom : 5px; width : 140px;" />';
+       tr += '<input class="cmdAttr form-control type input-sm" data-l1key="subType" value="string" disabled style="margin-bottom : 5px; width : 140px; " />';
+        tr += '</td>';
   		tr += '<td>';
 		tr += '<div class="form-group">';
         tr += '<div class="col-lg-2">';
@@ -82,9 +88,12 @@ tr += '</td>';
         tr += '</div>';
   		tr += '</td>';
    		tr += '<td>';
-  		tr += '<select type="text" id="Typeloc" class="cmdAttr configuration form-control" data-l1key="configuration" data-l2key="Typeloc">';
+  		tr += '<select id="Typeloc'+ init(_cmd.id) +'" class="cmdAttr configuration form-control" data-l1key="configuration" data-l2key="Typeloc" >';
   		tr += '<option value="lieu">{{lieu}}</option>';
     	tr += '<option value="personne">{{personne}}</option>';
+    	tr += '<option value="voiture">{{voiture}}</option>';
+  		tr += '<option value="smartphone">{{smartphone}}</option>';
+    	tr += '<option value="objet">{{objet}}</option>';
         tr += '</select>';
   		tr += '</td>';
   		tr += '<td><textarea class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="virtEq" style="height : 33px;" placeholder="{{Equipement}}"></textarea>';
@@ -121,7 +130,12 @@ tr += '</td>';
                 $('#div_alert').showAlert({message: data.result.result, level: 'danger'});
                 return;
             }
-		console.log($('.id' + init(_cmd.id) +'.cmdAttr'));
+		if ($('.id' + init(_cmd.id) +'.cmdAttr[data-l2key=icon]') == '') {
+		$('.id' + init(_cmd.id) +'.cmdAttr[data-l2key=icon]').value('/plugins/Multiloc/desktop/images/defaut.png');
+        } else{
+          		$('.id' + init(_cmd.id) +'.cmdAttr[data-l2key=icon]').value('/plugins/Multiloc/desktop/images/' + data.files[0]['name']);
+
+        }
           $('#collapseTwo').collapse('show');
             notify("{{Ajout d'une Image}}", '{{Image ajoutée avec succès}}', 'success');
         }
@@ -165,9 +179,26 @@ tr += '</td>';
     });
 }
 
-  $( "#Typeloc" ).change(function(){
+  $("#Typeloc"+ init(_cmd.id)).change(function(){
 
-
+      var el = $(this);
+console.log($("#Typeloc"+ init(_cmd.id)).val());
+   if($("#Typeloc"+ init(_cmd.id)).val() == "voiture"){
+       el.closest('tr').find('.cmdAttr[data-l1key=configuration][data-l2key=icon]').value('plugins/Multiloc/desktop/images/' + $("#Typeloc"+ init(_cmd.id)).val() + '.png');
+   }
+   if($("#Typeloc"+ init(_cmd.id)).val() == "lieu"){
+       el.closest('tr').find('.cmdAttr[data-l1key=configuration][data-l2key=icon]').value('plugins/Multiloc/desktop/images/' + $("#Typeloc"+ init(_cmd.id)).val()+ '.png');
+   }
+    if($("#Typeloc"+ init(_cmd.id)).val() == "personne"){
+       el.closest('tr').find('.cmdAttr[data-l1key=configuration][data-l2key=icon]').value('plugins/Multiloc/desktop/images/' + $("#Typeloc"+ init(_cmd.id)).val()+ '.png');
+   }
+    if($("#Typeloc"+ init(_cmd.id)).val() == "smartphone"){
+       el.closest('tr').find('.cmdAttr[data-l1key=configuration][data-l2key=icon]').value('plugins/Multiloc/desktop/images/' + $("#Typeloc"+ init(_cmd.id)).val()+ '.png');
+   }
+    if($("#Typeloc"+ init(_cmd.id)).val() == "objet"){
+       el.closest('tr').find('.cmdAttr[data-l1key=configuration][data-l2key=icon]').value('plugins/Multiloc/desktop/images/' + $("#Typeloc"+ init(_cmd.id)).val()+ '.png');
+   }
+    
   });
 function addImage(image, index) {
     var img = new Image();
@@ -188,3 +219,6 @@ function addImage(image, index) {
     });*/
 };
 }
+
+
+

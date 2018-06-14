@@ -34,7 +34,6 @@ class Multiloc extends eqLogic
         foreach (eqLogic::byType('Multiloc', true) as $eqLogic) {
             $eqLogic->updateInfo();
         }
-        $eqLogic->refreshWidget();
     }
 
  public static function cron5() {
@@ -44,7 +43,6 @@ $eqLogic->GetCenterFromDegrees();
 
 /*  Fonction exécutée automatiquement toutes les heures par Jeedom */
 public static function cronHourly() {
-$eqLogic->GetCenterFromDegrees();
 }
 
 
@@ -120,8 +118,52 @@ public function updateInfo()
 
         }
     }
+        $this->refreshWidget();
+}
+
+  function GetCenterFromDegrees()
+{
+$data = array();
+    foreach ($this->getCmd('info') as $cmd) {
+        $data[] = array($cmd->getConfiguration("lat"), $cmd->getConfiguration("lon"));
+    }
+
+    if (!is_array($data)) {
+      throw new \Exception(__('erreur d\'array', __FILE__));
+    }
+
+    $num_coords = count($data);
+
+    $X = 0.0;
+    $Y = 0.0;
+    $Z = 0.0;
+
+    foreach ($data as $coord)
+    {
+        $lat = $coord[0] * pi() / 180;
+        $lon = $coord[1] * pi() / 180;
+        $a = cos($lat) * cos($lon);
+        $b = cos($lat) * sin($lon);
+        $c = sin($lat);
+
+        $X += $a;
+        $Y += $b;
+        $Z += $c;
+    }
+
+    $X /= $num_coords;
+    $Y /= $num_coords;
+    $Z /= $num_coords;
+
+    $lon = atan2($Y, $X);
+    $hyp = sqrt($X * $X + $Y * $Y);
+    $lat = atan2($Z, $hyp);
+    $this->setConfiguration('map_center', $lat * 180 / pi(). ',' . $lon * 180 / pi());
+    $this->save();
+    log::add('Multiloc', 'debug', $lat * 180 / pi(). ',' . $lon * 180 / pi());
 
 }
+  
 
   function GetCenterFromDegrees()
 {
@@ -182,8 +224,7 @@ public function updateGeocoding($geoloc, $cmd) {
     }
     if ($cmd->getConfiguration('reverse')) {
         $url = 'https://nominatim.openstreetmap.org/reverse.php?format=jsonv2&addressdetails=1&lat='.$loc[0].'&lon='.$loc[1].'&email='.config::byKey('email', 'Multiloc') ;
-        $request_http = new com_http($url);
-        $data = $request_http->exec(30);
+        $data =  file_get_contents($url);
         if (!is_string($data) || !is_array(json_decode($data, true)) || (json_last_error() !== JSON_ERROR_NONE)) {
             log::add('Multiloc', 'debug', 'Erreur  url  ' . $url);
         }
@@ -216,7 +257,16 @@ public function toHtml($_version = 'dashboard') {
 
     foreach ($this->getCmd('info') as $cmd) {
 
-        if ($cmd->getConfiguration("Typeloc") == "personne"){
+if ($cmd->getConfiguration("Typeloc") == "lieu"){
+          	if ($cmd->getConfiguration("position") == '' || strrpos($cmd->getConfiguration("position"), ',') == false) {
+                log::add('Multiloc', 'debug', 'Erreur: position non conforme pour ' .$cmd->getName());
+				$icon = $icon .'';
+              	$lieu = $lieu .'';
+        }else{
+             $icon = $icon . 'var icon'.$cmd->getName() .' = L.icon({iconUrl: "'.$cmd->getConfiguration("icon").'",iconSize:     [40, 40], iconAnchor:   [20, 20]});';	
+            $lieu = $lieu . 'L.marker(['. $cmd->getConfiguration("position") .'], {icon: icon'.$cmd->getName() .'}).addTo(map'. $cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");L.circle(['. $cmd->getConfiguration("position") .'], '.$this->getConfiguration('dist_loc').', {color: "red",fillColor: "#f03",fillOpacity: 0.5}).addTo(map'.$cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");';
+            }
+        }else {
         	if (!preg_match('/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?),[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/', $cmd->getConfiguration("position"))) {
                  log::add('Multiloc', 'debug', 'Erreur: position non conforme pour ' .$cmd->getName());
 				 $icon = $icon . '';
@@ -226,15 +276,6 @@ public function toHtml($_version = 'dashboard') {
 		  	 $personne = $personne .'L.marker(['. $cmd->getConfiguration("position") .'], {icon: icon'.$cmd->getName() .'}).addTo(map'. $cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'"); ';
         	}
 
-        }elseif ($cmd->getConfiguration("Typeloc") == "lieu"){
-          	if ($cmd->getConfiguration("position") == '' || strrpos($cmd->getConfiguration("position"), ',') == false) {
-                log::add('Multiloc', 'debug', 'Erreur: position non conforme pour ' .$cmd->getName());
-				$icon = $icon .'';
-              	$lieu = $lieu .'';
-        }else{
-             $icon = $icon . 'var icon'.$cmd->getName() .' = L.icon({iconUrl: "'.$cmd->getConfiguration("icon").'",iconSize:     [40, 40], iconAnchor:   [20, 20]});';	
-            $lieu = $lieu . 'L.marker(['. $cmd->getConfiguration("position") .'], {icon: icon'.$cmd->getName() .'}).addTo(map'. $cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");L.circle(['. $cmd->getConfiguration("position") .'], '.$this->getConfiguration('dist_loc').', {color: "red",fillColor: "#f03",fillOpacity: 0.5}).addTo(map'.$cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");';
-            }
         }
       
        

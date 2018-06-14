@@ -178,7 +178,7 @@ position: inline;
 
                     <thead>
                         <tr>
-                            <th>{{Nom}}</th><th>{{Type}}</th><th>{{Recherche adresse}}</th><th>{{type de loc}}</th><th>{{coordonnées GPS}}</th>
+                            <th>{{Nom}}</th><th>{{Type}}</th><th>{{Recherche adresse}}</th><th>{{Type de loc}}</th><th>{{Coordonnées GPS}}</th><th>{{Parametres}}</th>
                         </tr>
                     </thead>
                     <tbody>
