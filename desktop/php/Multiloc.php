@@ -26,7 +26,7 @@ position: inline;
       font-size: 40px !important;
     direction: ltr;
 </style>
-
+      
 <div class="row row-overflow">
     <div class="col-lg-2 col-md-3 col-sm-4">
         <div class="bs-sidebar">
@@ -147,7 +147,7 @@ position: inline;
                                         metre(s)
                                     </div>
                                 </div>
-
+                                
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">{{niveau de zoom par defaut}}</label>
                                     <div class="col-sm-2">
@@ -157,19 +157,19 @@ position: inline;
                                         metre(s)
                                     </div>
                                 </div>
-
+                                
         	<div class="form-group">
             	<label class="col-sm-2 control-label">{{Centrage de la carte}}</label>
             	<div class="col-sm-3">
                   <input id="dist_loc" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="map_center" disabled/>
 
           		</div>
-      		</div>
+      		</div>  
                             </fieldset>
-
+                            
                     </div>
-
-
+                    
+                    
                 </form>
             </div>
             <div role="tabpanel" class="tab-pane" id="commandtab">
@@ -187,8 +187,8 @@ position: inline;
             </div>
                 <div role="tabpanel" class="tab-pane" id="maptab">
                                </div>
-
-
+               
+            
 </div>
 
         </div>
