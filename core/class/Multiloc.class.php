@@ -165,50 +165,6 @@ $data = array();
 }
   
 
-  function GetCenterFromDegrees()
-{
-$data = array();
-    foreach ($this->getCmd('info') as $cmd) {
-        $data[] = array($cmd->getConfiguration("lat"), $cmd->getConfiguration("lon"));
-    }
-
-    if (!is_array($data)) {
-      throw new \Exception(__('erreur d\'array', __FILE__));
-    }
-
-    $num_coords = count($data);
-
-    $X = 0.0;
-    $Y = 0.0;
-    $Z = 0.0;
-
-    foreach ($data as $coord)
-    {
-        $lat = $coord[0] * pi() / 180;
-        $lon = $coord[1] * pi() / 180;
-        $a = cos($lat) * cos($lon);
-        $b = cos($lat) * sin($lon);
-        $c = sin($lat);
-
-        $X += $a;
-        $Y += $b;
-        $Z += $c;
-    }
-
-    $X /= $num_coords;
-    $Y /= $num_coords;
-    $Z /= $num_coords;
-
-    $lon = atan2($Y, $X);
-    $hyp = sqrt($X * $X + $Y * $Y);
-    $lat = atan2($Z, $hyp);
-    $this->setConfiguration('map_center', $lat * 180 / pi(). ',' . $lon * 180 / pi());
-    $this->save();
-    log::add('Multiloc', 'debug', $lat * 180 / pi(). ',' . $lon * 180 / pi());
-
-}
-  
-
 public function updateGeocoding($geoloc, $cmd) {
     if ($geoloc == '' || strrpos($geoloc, ',') === false) {
         log::add('Multiloc', 'debug', 'Format de coordonnées non valide');
@@ -277,8 +233,6 @@ if ($cmd->getConfiguration("Typeloc") == "lieu"){
         	}
 
         }
-      
-       
 
         if ($cmd->getIsHistorized() == 1) {
             $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';

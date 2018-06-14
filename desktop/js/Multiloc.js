@@ -25,13 +25,6 @@ $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder:
     });
 });
 
-$("#table_cmd").delegate(".listEquipementInfo", 'click', function () {
-    var el = $(this);
-    jeedom.cmd.getSelectModal({cmd: {type: 'info'}}, function (result) {
-        var calcul = el.closest('tr').find('.cmdAttr[data-l1key=configuration][data-l2key=' + el.data('input') + ']');
-        calcul.atCaret('insert', result.human);
-    });
-});
 
 
 
@@ -48,7 +41,7 @@ function addCmdToTable(_cmd) {
     }
   
       var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
-          tr += '<td>';
+          tr += '<td>';  
   				tr += '<div class="row fileupload-buttonbar" style="width : 250px;">';
   					tr += '<div class="col-lg-9" >';
   						tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
@@ -97,7 +90,7 @@ function addCmdToTable(_cmd) {
         tr += '</select>';
   		tr += '</td>';
   		tr += '<td><textarea class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="virtEq" style="height : 33px;" placeholder="{{Equipement}}"></textarea>';
-       	tr += '<a class="btn btn-default cursor listEquipementInfo btn-sm" data-input="virtEq"><i class="fa fa-list-alt "></i> {{Rechercher équipement}}</a>';
+       	tr += '<a class="btn btn-default cursor listEquipementInfo btn-sm" data-input="virtEq"><i class="fa fa-list-alt "></i> {{Rechercher équipement}}</a>';      
   		tr += '</td>';
         tr += '<td style="width: 150px;">';
         tr += '<span><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isVisible" checked/> {{Afficher}}<br/></span>';
@@ -113,11 +106,10 @@ function addCmdToTable(_cmd) {
         tr += '</td>';
         tr += '</tr>';
         $('#table_cmd tbody').append(tr);
-
+   
         $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
         if (isset(_cmd.type)) {
-           $('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
-           $('#table_cmd tbody tr:last .cmdAttr[data-l1key=subType]').value(init(_cmd.subType));
+            $('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
         }
         jeedom.cmd.changeType($('#table_cmd tbody tr:last'), 'string');
 
@@ -140,7 +132,7 @@ function addCmdToTable(_cmd) {
             notify("{{Ajout d'une Image}}", '{{Image ajoutée avec succès}}', 'success');
         }
     });
-
+  
   function updateListImages() {
     $.ajax({
         type: "POST",
