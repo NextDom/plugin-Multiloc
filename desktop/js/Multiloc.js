@@ -39,9 +39,9 @@ function addCmdToTable(_cmd) {
     if (!isset(_cmd.configuration)) {
         _cmd.configuration = {};
     }
-  
+
       var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
-          tr += '<td>';  
+          tr += '<td>';
   				tr += '<div class="row fileupload-buttonbar" style="width : 250px;">';
   					tr += '<div class="col-lg-9" >';
   						tr += '<span class="cmdAttr" data-l1key="id" style="display:none;"></span>';
@@ -54,7 +54,7 @@ function addCmdToTable(_cmd) {
 					tr += ' </div>';
    				 if (isset(_cmd.configuration.icon)) {
                     tr += '  <div class="col-lg-3">';
-  						tr += '<img src="'+ _cmd.configuration.icon +'" style="width:auto; height:50px"></a>';
+  						tr += '<img id="monImage'+ init(_cmd.id)+ '" src="'+ _cmd.configuration.icon +'" style="width:auto; height:50px"></a>';
   					tr += ' </div>';
       tr += '<input class="cmdAttr  form-control input-sm id' + init(_cmd.id) + '" data-l1key="configuration" data-l2key="icon" style="display:none ">';
   	}else{
@@ -64,10 +64,8 @@ function addCmdToTable(_cmd) {
   		tr += ' </div>';
 
     }
-  					
-    			
-    				tr += ' </div>';				
-  tr += '<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">'; 
+
+    				tr += ' </div>';
         tr += '</td>';
         tr += '<td>';
   tr += '<input class="cmdAttr form-control type input-sm" data-l1key="type" value="info"  disabled style="margin-bottom : 5px; width : 140px;" />';
@@ -90,7 +88,7 @@ function addCmdToTable(_cmd) {
         tr += '</select>';
   		tr += '</td>';
   		tr += '<td><textarea class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="virtEq" style="height : 33px;" placeholder="{{Equipement}}"></textarea>';
-       	tr += '<a class="btn btn-default cursor listEquipementInfo btn-sm" data-input="virtEq"><i class="fa fa-list-alt "></i> {{Rechercher équipement}}</a>';      
+       	tr += '<a class="btn btn-default cursor listEquipementInfo btn-sm" data-input="virtEq"><i class="fa fa-list-alt "></i> {{Rechercher équipement}}</a>';
   		tr += '</td>';
         tr += '<td style="width: 150px;">';
         tr += '<span><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isVisible" checked/> {{Afficher}}<br/></span>';
@@ -106,7 +104,7 @@ function addCmdToTable(_cmd) {
         tr += '</td>';
         tr += '</tr>';
         $('#table_cmd tbody').append(tr);
-   
+
         $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
         if (isset(_cmd.type)) {
             $('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
@@ -128,11 +126,11 @@ function addCmdToTable(_cmd) {
           		$('.id' + init(_cmd.id) +'.cmdAttr[data-l2key=icon]').value('/plugins/Multiloc/desktop/images/' + data.files[0]['name']);
 
         }
-          $('#collapseTwo').collapse('show');
+           $('#monImage'+ init(_cmd.id)).attr('src','/plugins/Multiloc/desktop/images/' + data.files[0]['name']);
             notify("{{Ajout d'une Image}}", '{{Image ajoutée avec succès}}', 'success');
         }
     });
-  
+
   function updateListImages() {
     $.ajax({
         type: "POST",
@@ -177,20 +175,25 @@ function addCmdToTable(_cmd) {
 console.log($("#Typeloc"+ init(_cmd.id)).val());
    if($("#Typeloc"+ init(_cmd.id)).val() == "voiture"){
        el.closest('tr').find('.cmdAttr[data-l1key=configuration][data-l2key=icon]').value('plugins/Multiloc/desktop/images/' + $("#Typeloc"+ init(_cmd.id)).val() + '.png');
+     $('#monImage'+ init(_cmd.id)).attr('src','plugins/Multiloc/desktop/images/' + $("#Typeloc"+ init(_cmd.id)).val() + '.png');
    }
    if($("#Typeloc"+ init(_cmd.id)).val() == "lieu"){
        el.closest('tr').find('.cmdAttr[data-l1key=configuration][data-l2key=icon]').value('plugins/Multiloc/desktop/images/' + $("#Typeloc"+ init(_cmd.id)).val()+ '.png');
+     $('#monImage'+ init(_cmd.id)).attr('src','plugins/Multiloc/desktop/images/' + $("#Typeloc"+ init(_cmd.id)).val() + '.png');
    }
     if($("#Typeloc"+ init(_cmd.id)).val() == "personne"){
        el.closest('tr').find('.cmdAttr[data-l1key=configuration][data-l2key=icon]').value('plugins/Multiloc/desktop/images/' + $("#Typeloc"+ init(_cmd.id)).val()+ '.png');
+      $('#monImage'+ init(_cmd.id)).attr('src','plugins/Multiloc/desktop/images/' + $("#Typeloc"+ init(_cmd.id)).val() + '.png');
    }
     if($("#Typeloc"+ init(_cmd.id)).val() == "smartphone"){
        el.closest('tr').find('.cmdAttr[data-l1key=configuration][data-l2key=icon]').value('plugins/Multiloc/desktop/images/' + $("#Typeloc"+ init(_cmd.id)).val()+ '.png');
+      $('#monImage'+ init(_cmd.id)).attr('src','plugins/Multiloc/desktop/images/' + $("#Typeloc"+ init(_cmd.id)).val() + '.png');
    }
     if($("#Typeloc"+ init(_cmd.id)).val() == "objet"){
        el.closest('tr').find('.cmdAttr[data-l1key=configuration][data-l2key=icon]').value('plugins/Multiloc/desktop/images/' + $("#Typeloc"+ init(_cmd.id)).val()+ '.png');
+      $('#monImage'+ init(_cmd.id)).attr('src','plugins/Multiloc/desktop/images/' + $("#Typeloc"+ init(_cmd.id)).val() + '.png');
    }
-    
+
   });
 function addImage(image, index) {
     var img = new Image();
@@ -211,6 +214,3 @@ function addImage(image, index) {
     });*/
 };
 }
-
-
-
