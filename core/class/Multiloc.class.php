@@ -134,7 +134,7 @@ public function updateInfo()
 
         }
     }
-    $this->getCenterFromDegrees()
+    $this->getCenterFromDegrees();
     $this->refreshWidget();
 }
 
