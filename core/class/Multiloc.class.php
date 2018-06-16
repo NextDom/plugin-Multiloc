@@ -32,14 +32,16 @@ class Multiloc extends eqLogic
     public static function cron() {
 
         foreach (eqLogic::byType('Multiloc', true) as $eqLogic) {
+            log::add('Multiloc', 'debug', 'cron pour l\'équipement' . $eqLogic);
             $eqLogic->updateInfo();
         }
     }
 
  public static function cron5() {
-
-$eqLogic->GetCenterFromDegrees();
-    }
+   foreach (eqLogic::byType('Multiloc', true) as $eqLogic) {
+	$eqLogic->GetCenterFromDegrees();
+   }
+}
 
 /*  Fonction exécutée automatiquement toutes les heures par Jeedom */
 public static function cronHourly() {
@@ -73,11 +75,8 @@ public function preSave()
 
 public function postSave()
 {
-  
-       
     $this->updateInfo();
 }
-
 
 
 public function preUpdate()
@@ -108,28 +107,40 @@ public function postRemove()
 public function updateInfo()
 {
     foreach ($this->getCmd('info') as $cmd) {
+      log::add('Multiloc', 'debug', 'Mise a jour des infos de la commande ' . $cmd->getName() );
         $cmd_id =  substr($cmd->getConfiguration('virtEq'),1,-1);
         $cmd_virt = cmd::byId($cmd_id);
         if (is_object($cmd_virt)) {
             $cmd_value = $cmd_virt->execCmd();
             $cmd->setConfiguration('position', $cmd_value);
+          	$loc = explode(',',$cmd_value);
+  	  		$cmd->setConfiguration('lat', $loc[0]);
+  	  		$cmd->setConfiguration('lon', $loc[1]);
+          	$adresse = $this->updateGeocoding($cmd_value, $cmd);
+          	$cmd->setConfiguration('numero', $adresse['numero']);
+    		$cmd->setConfiguration('rue', $adresse['rue']);
+  			$cmd->setConfiguration('ville', $adresse['ville']);
+    		$cmd->setConfiguration('codepostale', $adresse['codepostale']);
             $cmd->save();
-            $this->updateGeocoding($cmd->getConfiguration('position'), $cmd);
 
         }
+
     }
+
         $this->refreshWidget();
 }
 
-  function GetCenterFromDegrees()
+public function GetCenterFromDegrees()
 {
+log::add('Multiloc', 'debug', 'Mise a jour des coordonnées de centrage');
 $data = array();
     foreach ($this->getCmd('info') as $cmd) {
         $data[] = array($cmd->getConfiguration("lat"), $cmd->getConfiguration("lon"));
     }
 
     if (!is_array($data)) {
-      throw new \Exception(__('erreur d\'array', __FILE__));
+                log::add('Multiloc', 'debug', 'erreur array pour centrage de la carte');
+      throw new \Exception(__('erreur array pour centrage de la carte', __FILE__));
     }
 
     $num_coords = count($data);
@@ -159,27 +170,22 @@ $data = array();
     $hyp = sqrt($X * $X + $Y * $Y);
     $lat = atan2($Z, $hyp);
     $this->setConfiguration('map_center', $lat * 180 / pi(). ',' . $lon * 180 / pi());
+    log::add('Multiloc', 'debug', 'centrage carte sur le point ' .$lat * 180 / pi(). ',' . $lon * 180 / pi());
     $this->save();
-    log::add('Multiloc', 'debug', $lat * 180 / pi(). ',' . $lon * 180 / pi());
-
 }
-  
+
 
 public function updateGeocoding($geoloc, $cmd) {
+  log::add('Multiloc', 'debug', 'Mise a jour de l\'adresse pour l\'équipement ' . $cmd->getName());
     if ($geoloc == '' || strrpos($geoloc, ',') === false) {
         log::add('Multiloc', 'debug', 'Format de coordonnées non valide');
-
     }
-    $loc = explode(',',$geoloc);
-  	$cmd->setConfiguration('lat', $loc[0]);
-  	$cmd->setConfiguration('lon', $loc[1]);
-  	$cmd->save();
     if (config::byKey('email', 'Multiloc') == '') {
         log::add('Multiloc', 'debug', 'Vous devez remplir votre email dans la page de configuration');
         return;
     }
     if ($cmd->getConfiguration('reverse')) {
-        $url = 'https://nominatim.openstreetmap.org/reverse.php?format=jsonv2&addressdetails=1&lat='.$loc[0].'&lon='.$loc[1].'&email='.config::byKey('email', 'Multiloc') ;
+        $url = 'https://nominatim.openstreetmap.org/reverse.php?format=jsonv2&addressdetails=1&lat='.$cmd->getConfiguration('lat').'&lon='.$cmd->getConfiguration('lon').'&email='.config::byKey('email', 'Multiloc') ;
         $data =  file_get_contents($url);
         if (!is_string($data) || !is_array(json_decode($data, true)) || (json_last_error() !== JSON_ERROR_NONE)) {
             log::add('Multiloc', 'debug', 'Erreur  url  ' . $url);
@@ -188,16 +194,10 @@ public function updateGeocoding($geoloc, $cmd) {
     } else {
 
     }
-    $this->updateData($jsondata, $cmd);
+  return array ('numero' =>$jsondata['address']['house_number'], 'rue' => $jsondata['address']['road'], 'ville' =>$jsondata['address']['town'],'codepostale' => $jsondata['address']['postcode']);
 }
 
-public function updateData($jsondata, $cmd) {
-  	$cmd->setConfiguration('numero', $jsondata['address']['house_number']);
-    $cmd->setConfiguration('rue', $jsondata['address']['road']);
-    $cmd->setConfiguration('ville', $jsondata['address']['town']);
-    $cmd->setConfiguration('codepostale', $jsondata['address']['postcode']);
-    $cmd->save();
-}
+
 //Non obligatoire mais permet de modifier l'affichage du widget si vous en avez besoin
 public function toHtml($_version = 'dashboard') {
     $replace = $this->preToHtml($_version);
@@ -219,7 +219,7 @@ if ($cmd->getConfiguration("Typeloc") == "lieu"){
 				$icon = $icon .'';
               	$lieu = $lieu .'';
         }else{
-             $icon = $icon . 'var icon'.$cmd->getName() .' = L.icon({iconUrl: "'.$cmd->getConfiguration("icon").'",iconSize:     [40, 40], iconAnchor:   [20, 20]});';	
+             $icon = $icon . 'var icon'.$cmd->getName() .' = L.icon({iconUrl: "'.$cmd->getConfiguration("icon").'",iconSize:     [40, 40], iconAnchor:   [20, 20]});';
             $lieu = $lieu . 'L.marker(['. $cmd->getConfiguration("position") .'], {icon: icon'.$cmd->getName() .'}).addTo(map'. $cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");L.circle(['. $cmd->getConfiguration("position") .'], '.$this->getConfiguration('dist_loc').', {color: "red",fillColor: "#f03",fillOpacity: 0.5}).addTo(map'.$cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");';
             }
         }else {
