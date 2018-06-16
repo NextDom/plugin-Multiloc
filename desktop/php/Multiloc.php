@@ -1,4 +1,22 @@
+
 <?php
+/*
+ * This file is part of the NextDom software (https://github.com/NextDom or http://nextdom.github.io).
+ * Copyright (c) 2018 NextDom.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
@@ -26,7 +44,7 @@ position: inline;
       font-size: 40px !important;
     direction: ltr;
 </style>
-      
+
 <div class="row row-overflow">
     <div class="col-lg-2 col-md-3 col-sm-4">
         <div class="bs-sidebar">
@@ -147,7 +165,7 @@ position: inline;
                                         metre(s)
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">{{niveau de zoom par defaut}}</label>
                                     <div class="col-sm-2">
@@ -157,19 +175,19 @@ position: inline;
                                         metre(s)
                                     </div>
                                 </div>
-                                
+
         	<div class="form-group">
             	<label class="col-sm-2 control-label">{{Centrage de la carte}}</label>
             	<div class="col-sm-3">
                   <input id="dist_loc" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="map_center" disabled/>
 
           		</div>
-      		</div>  
+      		</div>
                             </fieldset>
-                            
+
                     </div>
-                    
-                    
+
+
                 </form>
             </div>
             <div role="tabpanel" class="tab-pane" id="commandtab">
@@ -187,8 +205,8 @@ position: inline;
             </div>
                 <div role="tabpanel" class="tab-pane" id="maptab">
                                </div>
-               
-            
+
+
 </div>
 
         </div>

@@ -16,6 +16,23 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*
+ * This file is part of the NextDom software (https://github.com/NextDom or http://nextdom.github.io).
+ * Copyright (c) 2018 NextDom.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 require_once 'MultilocCmd.class.php';
@@ -37,9 +54,10 @@ class Multiloc extends eqLogic
     }
 
  public static function cron5() {
-
-$eqLogic->GetCenterFromDegrees();
-    }
+   foreach (eqLogic::byType('Multiloc', true) as $eqLogic) {
+	$eqLogic->GetCenterFromDegrees();
+   }
+}
 
 /*  Fonction exécutée automatiquement toutes les heures par Jeedom */
 public static function cronHourly() {
@@ -73,8 +91,8 @@ public function preSave()
 
 public function postSave()
 {
-  
-       
+
+
     $this->updateInfo();
 }
 
@@ -121,7 +139,7 @@ public function updateInfo()
         $this->refreshWidget();
 }
 
-  function GetCenterFromDegrees()
+public function GetCenterFromDegrees()
 {
 $data = array();
     foreach ($this->getCmd('info') as $cmd) {
@@ -129,7 +147,8 @@ $data = array();
     }
 
     if (!is_array($data)) {
-      throw new \Exception(__('erreur d\'array', __FILE__));
+                log::add('Multiloc', 'debug', 'erreur array pour centrage de la carte');
+      throw new \Exception(__('erreur array pour centrage de la carte', __FILE__));
     }
 
     $num_coords = count($data);
@@ -159,11 +178,11 @@ $data = array();
     $hyp = sqrt($X * $X + $Y * $Y);
     $lat = atan2($Z, $hyp);
     $this->setConfiguration('map_center', $lat * 180 / pi(). ',' . $lon * 180 / pi());
-    $this->save();
-    log::add('Multiloc', 'debug', $lat * 180 / pi(). ',' . $lon * 180 / pi());
+    log::add('Multiloc', 'debug', 'centrage carte sur le point ' .$lat * 180 / pi(). ',' . $lon * 180 / pi());
 
+    $this->save();
 }
-  
+
 
 public function updateGeocoding($geoloc, $cmd) {
     if ($geoloc == '' || strrpos($geoloc, ',') === false) {
@@ -219,7 +238,7 @@ if ($cmd->getConfiguration("Typeloc") == "lieu"){
 				$icon = $icon .'';
               	$lieu = $lieu .'';
         }else{
-             $icon = $icon . 'var icon'.$cmd->getName() .' = L.icon({iconUrl: "'.$cmd->getConfiguration("icon").'",iconSize:     [40, 40], iconAnchor:   [20, 20]});';	
+             $icon = $icon . 'var icon'.$cmd->getName() .' = L.icon({iconUrl: "'.$cmd->getConfiguration("icon").'",iconSize:     [40, 40], iconAnchor:   [20, 20]});';
             $lieu = $lieu . 'L.marker(['. $cmd->getConfiguration("position") .'], {icon: icon'.$cmd->getName() .'}).addTo(map'. $cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");L.circle(['. $cmd->getConfiguration("position") .'], '.$this->getConfiguration('dist_loc').', {color: "red",fillColor: "#f03",fillOpacity: 0.5}).addTo(map'.$cmd->getEqLogic_id().').bindPopup("' .$cmd->getName() .'");';
             }
         }else {
