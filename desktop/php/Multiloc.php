@@ -1,4 +1,3 @@
-
 <?php
 /*
  * This file is part of the NextDom software (https://github.com/NextDom or http://nextdom.github.io).
@@ -16,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
@@ -33,6 +32,23 @@ $eqLogics = eqLogic::byType($plugin->getId());
 ?>
 
 <style>
+  .divIconSel{
+        height: 80px;
+        border: 1px solid #fff;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
+    .iconSel{
+        line-height: 1.4;
+        font-size: 1.5em;
+    }
+    .iconSelected{
+        background-color: #563d7c;
+        color: white;
+    }
+    .iconDesc{
+        font-size: 0.8em;
+    }
       .fileinput-button input {
 position: inline;
     top: 0;
@@ -98,7 +114,9 @@ position: inline;
             <li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fa fa-arrow-circle-left"></i></a></li>
             <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
             <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Commandes}}</a></li>
-        </ul>
+        	<li role="presentation"><a href="#avatartab" aria-controls="avatar" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Avatar}}</a></li>
+
+              </ul>
         <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
             <div role="tabpanel" class="tab-pane active" id="eqlogictab">
                 <br/>
@@ -203,8 +221,14 @@ position: inline;
                     </tbody>
                 </table>
             </div>
-                <div role="tabpanel" class="tab-pane" id="maptab">
+                <div role="tabpanel" class="tab-pane" id="avatartab">
+                                            <div id="collapseTwo" class="panel-collapse" role="tabpanel" aria-labelledby="headingTwo">
+
+                <div class="panel-body" id="bsImagesPanel">
+                                    <div class="col-sm-12" id="bsImagesView" style="min-height: 50px"></div>
+</div>
                                </div>
+                                </div>
 
 
 </div>

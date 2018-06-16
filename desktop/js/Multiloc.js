@@ -14,6 +14,7 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
+ updateListImages();
 
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 
@@ -25,7 +26,88 @@ $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder:
     });
 });
 
-
+  function updateListImages() {
+    $.ajax({
+        type: "POST",
+        url: "plugins/Multiloc/core/ajax/Multiloc.ajax.php",
+        data: {
+            action: "listImage"
+        },
+        dataType: 'json',
+        error: function (request, status, error) {
+            handleAjaxError(request, status, error);
+        },
+        success: function (data) {
+            if (data.state !== 'ok') {
+                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                return;
+            }
+            var images = '';
+            imagesWidgets = [];
+            data = data.result;
+            for (var i in data) {
+                images += '<div class="media-left col-sm-2" style="max-width: 170px">';
+                images += '<div class="well col-sm-12 noPaddingWell noPaddingLeft noPaddingRight noMarginBottom">';
+                images += '<button type="button" class="pull-left btn btn-xs btn-danger bsDelImage" data-image="' + data[i] + "\" title=\"{{Supprimer l'image}}\"><i class='fa fa-trash-o'></i></button>";
+                images += '<div class="col-sm-6 noPaddingLeft noPaddingRight text-right pull-right" id="bsViewImageSize' + i + '"></div>';
+                images += '</div>';
+                images += '<img class="img-thumbnail center-block" src="plugins/Multiloc/desktop/images/' + data[i] + '" alt="' + data[i] + '" title="' + data[i] + '" id="bsViewImage' + i + '">';
+                images += '<div class="well col-sm-12 noPaddingLeft noPaddingRight noPaddingWell text-center" id="bsViewImageWH' + i + '">'+data[i]+'</div>';
+                images += '</div>';
+                imagesWidgets.push(data[i]);
+            }
+            $('#bsImagesView').html('<div class="media">' + images + '</div>');
+            for (var i in data) {
+                addImage(data[i], i);
+            }
+        }
+    });
+}
+function addImage(image, index) {
+    var img = new Image();
+    img.src = "plugins/Multiloc/desktop/images/" + image + "";
+    var xhr = new XMLHttpRequest();
+    xhr.open('HEAD', img.src, true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                var size = Math.round(xhr.getResponseHeader('Content-Length') / 1024);
+                $('#bsImagesView').find('#bsViewImageSize' + index).append('<strong class="text-right text-nowrap">' + size + 'Ko</strong>');
+            }
+        }
+    };
+    xhr.send(null);
+  /* img.on('load', function() {
+        $('#bsImagesView').find('#bsViewImageWH' + index).append('<strong style="font-size:12px" class="text-nowrap">H: ' + this.width + ' - L:' + this.height + '</strong>');
+    });*/
+};
+$('#bsImagesView').on('click', '.bsDelImage', function () {
+        var image = $(this).data('image');
+        bootbox.confirm("{{Etes-vous sur de vouloir effacer cette image}}", function (result) {
+            if (result) {
+                $.ajax({
+                    type: "POST",
+                    url: "plugins/Multiloc/core/ajax/Multiloc.ajax.php",
+                    data: {
+                        action: "removeImage",
+                        image: image
+                    },
+                    dataType: 'json',
+                    error: function (request, status, error) {
+                        handleAjaxError(request, status, error);
+                    },
+                    success: function (data) {
+                        if (data.state !== 'ok') {
+                            $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                            return;
+                        }
+                        updateListImages();
+                        notify("Suppression d'une Image", '{{Image supprimée avec succès}}', 'success');
+                    }
+                });
+            }
+        });
+});
 
 
 /*
@@ -131,44 +213,6 @@ function addCmdToTable(_cmd) {
         }
     });
 
-  function updateListImages() {
-    $.ajax({
-        type: "POST",
-        url: "plugins/Multiloc/core/ajax/Multiloc.ajax.php",
-        data: {
-            action: "listImage"
-        },
-        dataType: 'json',
-        error: function (request, status, error) {
-            handleAjaxError(request, status, error);
-        },
-        success: function (data) {
-            if (data.state !== 'ok') {
-                $('#div_alert').showAlert({message: data.result, level: 'danger'});
-                return;
-            }
-            var images = '';
-            imagesWidgets = [];
-            data = data.result;
-            for (var i in data) {
-                images += '<div class="media-left col-sm-2" style="min-width: 105px">';
-                images += '<div class="well col-sm-12 noPaddingWell noPaddingLeft noPaddingRight noMarginBottom">';
-                images += '<button type="button" class="pull-left btn btn-xs btn-danger bsDelImage" data-image="' + data[i] + "\" title=\"{{Supprimer l'image}}\"><i class='fa fa-trash-o'></i></button>";
-                images += '<div class="col-sm-6 noPaddingLeft noPaddingRight text-right pull-right" id="bsViewImageSize' + i + '"></div>';
-                images += '</div>';
-                images += '<img class="img-thumbnail center-block" src="plugins/Multiloc/desktop/images/' + data[i] + '" alt="' + data[i] + '" title="' + data[i] + '" id="bsViewImage' + i + '">';
-                images += '<div class="well col-sm-12 noPaddingLeft noPaddingRight noPaddingWell text-center" id="bsViewImageWH' + i + '"></div>';
-                images += '</div>';
-                imagesWidgets.push(data[i]);
-            }
-            $('#bsImagesView'+ init(_cmd.id)).html('<div class="media">' + images + '</div>');
-            for (var i in data) {
-                addImage(data[i], i);
-            }
-        }
-    });
-}
-
   $("#Typeloc"+ init(_cmd.id)).change(function(){
 
       var el = $(this);
@@ -195,22 +239,4 @@ console.log($("#Typeloc"+ init(_cmd.id)).val());
    }
 
   });
-function addImage(image, index) {
-    var img = new Image();
-    img.src = "plugins/Multiloc/desktop/images/" + image + "";
-    var xhr = new XMLHttpRequest();
-    xhr.open('HEAD', img.src, true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                var size = Math.round(xhr.getResponseHeader('Content-Length') / 1024);
-                $('#bsImagesView' + init(_cmd.id)).find('#bsViewImageSize' + index).append('<strong class="text-right text-nowrap">' + size + 'Ko</strong>');
-            }
-        }
-    };
-    xhr.send(null);
-  /* img.on('load', function() {
-        $('#bsImagesView').find('#bsViewImageWH' + index).append('<strong style="font-size:12px" class="text-nowrap">H: ' + this.width + ' - L:' + this.height + '</strong>');
-    });*/
-};
 }
