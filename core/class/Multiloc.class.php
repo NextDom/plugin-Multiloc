@@ -194,7 +194,7 @@ public function updateGeocoding($geoloc, $cmd) {
     } else {
 
     }
-  return array ('numero' =>$jsondata['address']['house_number'], 'rue' => $jsondata['address']['road'], 'ville' =>$jsondata['address']['town'],'codepostale' => $jsondata['address']['postcode']);
+  return array ('numero' =>$jsondata['address']['house_number'], 'rue' => $jsondata['address']['road'], 'ville' =>$jsondata['address']['county'],'codepostale' => $jsondata['address']['postcode']);
 }
 
 
